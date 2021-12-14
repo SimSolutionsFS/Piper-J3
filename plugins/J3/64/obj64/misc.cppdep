@@ -1,0 +1,11 @@
+64/obj64/misc.o: src/misc.cpp \
+ src/../libs/XSDK/CHeaders/XPLM/XPLMDataAccess.h \
+ src/../libs/XSDK/CHeaders/XPLM/XPLMDefs.h \
+ src/../libs/XSDK/CHeaders/XPLM/XPLMUtilities.h \
+ src/../libs/XSDK/CHeaders/XPLM/XPLMMenus.h \
+ src/../libs/XSDK/CHeaders/XPLM/XPLMUtilities.h \
+ src/../libs/libacfutils/include/acfutils/log.h \
+ src/../libs/libacfutils/include/acfutils/sysmacros.h \
+ src/../libs/libacfutils/include/acfutils/types.h \
+ src/../libs/libacfutils/include/acfutils/core.h \
+ src/../libs/libacfutils/include/acfutils/libconfig.h src/misc.h
