@@ -11,9 +11,13 @@ ifeq ($(OS),Windows_NT)
 
 	LIBS = \
 		-L$(SRC_BASE)/../libs/XSDK/Libraries/Win \
-		-L$(SRC_BASE)/../libs/libacfutils/lin64/lib \
-		-l:libGLEWmx.a \
+		-L$(SRC_BASE)/../libs/libacfutils/mingw64/lib \
+		-lXPLM_64 \
+		-lXPWidgets_64 \
 		-l:libacfutils.a \
+		-l:libglew32mx.a \
+		-limagehlp \
+		-lPsapi \
 		-lstdc++
 
 	INCLUDES = \
