@@ -1,0 +1,9 @@
+[submodule "plugins/DA40/libs/XSDK"]
+	path = plugins/DA40/libs/XSDK
+	url = https://github.com/fpw/XSDK
+[submodule "plugins/DA40/libs/stb"]
+	path = plugins/DA40/libs/stb
+	url = https://github.com/nothings/stb
+[submodule "plugins/DA40/libs/libacfutils"]
+	path = plugins/DA40/libs/libacfutils
+	url = https://github.com/SimSolutions1/libacfutils
