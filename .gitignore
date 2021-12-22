@@ -1,0 +1,14 @@
+# GCC/G++ stuff we don't want
+plugins/J3/64/obj64/*
+plugins/J3/64/lin/*
+
+# Plugin-related folders we dont want
+plugins/J3/Debug/*
+plugins/J3/x64/*
+plugins/J3/packages/*
+plugins/J3/src/.vscode/launch.json
+plugins/OpenGPWS/airport.cache/*
+
+# X-Plane stuff we dont want
+J-3.acf~
+J-3_prefs.txt

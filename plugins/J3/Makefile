@@ -11,21 +11,16 @@ ifeq ($(OS),Windows_NT)
 
 	LIBS = \
 		-L$(SRC_BASE)/../libs/XSDK/Libraries/Win \
-		-L$(SRC_BASE)/../libs/libacfutils/win64/lib \
-		-L:"C:/Windows/System32" \
-		-lOpengl32 \
-		-lodbc32 \
-		-lodbccp32 \
-		-lXPLM_64 \
-		-lXPWidgets_64 \
-		-l:libacfutils32.a \
+		-L$(SRC_BASE)/../libs/libacfutils/lin64/lib \
+		-l:libGLEWmx.a \
+		-l:libacfutils.a \
 		-lstdc++
 
 	INCLUDES = \
 		-I$(SRC_BASE)/../libs/XSDK/CHeaders/XPLM \
 		-I$(SRC_BASE)/../libs/XSDK/CHeaders/Widgets \
 		-I$(SRC_BASE)/../libs/libacfutils/include \
-		-I$(SRC_BASE)/../libs/libacfutils/win64/include \
+		-I$(SRC_BASE)/../libs/libacfutils/mingw64/include \
 		-I$(SRC_BASE)/../libs/stb
 
 	DEFINES = -DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM302=1 -DXPLM303=1 -DAPL=0 -DIBM=1 -DLIN=0 -DGLEW_STATIC
