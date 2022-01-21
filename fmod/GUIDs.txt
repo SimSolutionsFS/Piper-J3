@@ -1,0 +1,17 @@
+{dde72642-51dc-45b5-a2ab-8000aed52339} event:/Clutter
+{3df1ebfe-3f48-4101-aa94-b80d964658cf} event:/Covers
+{0deef49b-1573-4ca1-b87a-ace1663e9456} event:/Cowling
+{baebc989-e5b7-40ee-ac20-c90ac2695836} event:/Door
+{a3ccbd50-5e9e-4b61-85da-d5546e2ab5d1} event:/FuelSelect
+{8cfbc0e4-c6ac-49f9-903f-14a9449b436d} event:/ThrottleClick
+{9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
+{7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
+{e3492bec-f854-4fbb-b2bc-23586269032e} bus:/Master/Copilot
+{a5a85a81-afd5-4425-9dc2-6e50f7776e6a} bus:/Master/Exterior Processed
+{06db5351-0b2f-4648-b97a-a33b40a00e11} bus:/Master/Exterior Processed/Aircraft
+{b6c156f1-9861-405c-a622-92b2ab8010a7} bus:/Master/Exterior Processed/Environment
+{8dbbc9d7-a954-4ed0-b1f1-f8111b03cbd1} bus:/Master/Exterior Unprocessed
+{751f5066-4651-4afb-a410-4cb9db0894c9} bus:/Master/Interior
+{d8526059-b27c-4eae-9b14-a1ee1cb3dfa1} bus:/Master/Radios
+{77575f3b-b9cd-4bff-9056-637cff744a14} bus:/Master/UI
+{69e92124-19d7-4fdb-a960-695eb8b3a758} bank:/Master Bank
