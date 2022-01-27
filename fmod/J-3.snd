@@ -63,7 +63,154 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
 	EVENT_NAME /FuelSelect
 	VEH_XYZ -0.331 -0.059 -0.139
-	EVENT_START_COND sim/cockpit/engine/fuel_tank_selector < 1.00
+	EVENT_START_COND sim/cockpit/engine/fuel_tank_selector < 4.00
 END_SOUND_ATTACHMENT
 
-#ENGINE
+#############
+# ENGINE
+#############
+
+BEGIN_SOUND_ATTACHMENT
+	EVENT_NAME /Engine/Engine
+	VEH_XYZ 0 -0.060 -0.00
+        EVENT_ALLOWED_FOR_AI
+	EVENT_START_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] > 200
+	EVENT_END_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] < 200
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+	EVENT_NAME /Engine/EngineOff
+	VEH_XYZ 0 -0.060 -0.139
+        EVENT_ALLOWED_FOR_AI
+	EVENT_START_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] < 150
+	EVENT_END_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] > 10
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+	EVENT_NAME /Engine/EngineMid
+	VEH_XYZ 0 -0.060 -0.139
+	EVENT_ALLOWED_FOR_AI
+	EVENT_START_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] > 200
+	EVENT_END_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] < 200
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+	EVENT_NAME /Engine/EngineInt
+	VEH_XYZ 0 -0.060 -0.139
+	EVENT_ALLOWED_FOR_AI
+	EVENT_START_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] > 200
+	EVENT_END_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] < 200
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+	EVENT_NAME /Engine/EngineStart
+	VEH_XYZ 0 -0.060 -0.139
+	EVENT_ALLOWED_FOR_AI
+	EVENT_START_COND sim/flightmodel2/engines/starter_is_running[0] == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+	EVENT_NAME /Engine/EngineAft
+	VEH_XYZ 0 -0.060 -0.539
+	EVENT_ALLOWED_FOR_AI
+	EVENT_START_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] > 200
+	EVENT_END_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] < 200
+END_SOUND_ATTACHMENT
+
+#############
+FLIGHT CONTROLS
+#############
+
+BEGIN_SOUND_ATTACHMENT
+        EVENT_NAME /Aileron
+        VEH_XYZ -3.00 0.08 -0.139
+        EVENT_START_COND sim/flightmodel2/wing/aileron1_deg[0] < -5
+        EVENT_END_COND
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+        EVENT_NAME /Aileron
+        VEH_XYZ -3.00 0.08 -0.139
+        EVENT_START_COND sim/flightmodel2/wing/aileron1_deg[0] > -18
+        EVENT_END_COND
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+        EVENT_NAME /Aileron
+        VEH_XYZ 3.00 0.08 -0.139
+	EVENT_ALLOWED_FOR_AI
+        EVENT_START_COND sim/flightmodel2/wing/aileron1_deg[0] > 5
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+        EVENT_NAME /Aileron
+        VEH_XYZ 3.00 0.08 -0.139
+	EVENT_ALLOWED_FOR_AI
+        EVENT_START_COND sim/flightmodel2/wing/aileron1_deg[0] < 18
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+	EVENT_NAME /Trim
+	VEH_XYZ -0.331 -0.059 -0.139
+	EVENT_START_COND sim/cockpit2/controls/elevator_trim > -1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+        EVENT_NAME /Elevator
+        VEH_XYZ 0 0.30 4.26
+        EVENT_START_COND sim/flightmodel2/wing/elevator1_deg[0] < -5
+        EVENT_END_COND
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+        EVENT_NAME /Elevator
+        VEH_XYZ 0 0.30 4.26
+        EVENT_START_COND sim/flightmodel2/wing/elevator1_deg[0] > -18
+        EVENT_END_COND
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+        EVENT_NAME /Elevator
+        VEH_XYZ 0 0.30 4.26
+	EVENT_ALLOWED_FOR_AI
+        EVENT_START_COND sim/flightmodel2/wing/elevator1_deg[0] > 5
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+        EVENT_NAME /Elevator
+        VEH_XYZ 0 0.30 4.26
+	EVENT_ALLOWED_FOR_AI
+        EVENT_START_COND sim/flightmodel2/wing/elevator1_deg[0] < 18
+END_SOUND_ATTACHMENT
+
+###############
+GEAR
+###############
+
+BEGIN_SOUND_ATTACHMENT
+	EVENT_NAME /TireL
+	VEH_XYZ -0.50 -0.90 -0.139
+	EVENT_ALLOWED_FOR_AI
+	EVENT_START_COND sim/flightmodel2/gear/tire_rotation_speed_rad_sec[0] > 1
+	EVENT_END_COND 
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+	EVENT_NAME /TireR
+	VEH_XYZ 0.50 -0.90 -0.139
+	EVENT_ALLOWED_FOR_AI
+	EVENT_START_COND sim/flightmodel2/gear/tire_rotation_speed_rad_sec[1] > 1
+	EVENT_END_COND
+END_SOUND_ATTACHMENT
+
+#################
+ENVIRONMENT
+#################
+
+BEGIN_SOUND_ATTACHMENT
+	EVENT_NAME /TireRoll
+	VEH_XYZ 0 -0.90 -0.139
+	EVENT_ALLOWED_FOR_AI
+	EVENT_START_COND sim/cockpit2/gauges/indicators/airspeed_kts_stby[0] > 1
+	EVENT_END_COND sim/cockpit2/gauges/indicators/airspeed_kts_stby[0] < 1
+END_SOUND_ATTACHMENT

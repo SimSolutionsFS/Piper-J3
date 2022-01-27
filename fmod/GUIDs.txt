@@ -1,9 +1,21 @@
+{96d88ebc-8283-4b16-a5ea-91322eee527f} event:/Engine/Engine
+{d404ef0c-f700-4d02-ba74-c7884e7b35b3} event:/Engine/EngineAft
+{8f3f6599-3016-4233-8f57-c2b88f0ef8b7} event:/Engine/EngineInt
+{4e90c742-e0ba-4b15-aa43-79c5d9487992} event:/Engine/EngineMid
+{ce01b318-30dc-4180-b467-c499b4855ed7} event:/Engine/EngineOff
+{d2842d7a-a89b-4dcf-a963-df31bc575d95} event:/Engine/EngineStart
+{fe2164f2-ccec-4834-a8a8-f134279cfafc} event:/Aileron
 {dde72642-51dc-45b5-a2ab-8000aed52339} event:/Clutter
 {3df1ebfe-3f48-4101-aa94-b80d964658cf} event:/Covers
 {0deef49b-1573-4ca1-b87a-ace1663e9456} event:/Cowling
 {baebc989-e5b7-40ee-ac20-c90ac2695836} event:/Door
+{8ec58216-84e9-4ddc-b7e3-189dade15e0a} event:/Elevator
 {a3ccbd50-5e9e-4b61-85da-d5546e2ab5d1} event:/FuelSelect
 {8cfbc0e4-c6ac-49f9-903f-14a9449b436d} event:/ThrottleClick
+{447dcdca-29e9-407d-b201-6f14ebb2ee0e} event:/TireL
+{38c25ff8-88be-47a0-83f0-50199e077fc8} event:/TireR
+{234334c8-68a6-49b4-bd3a-3b77f13ae5f9} event:/TireRoll
+{d7a31cd1-e6cb-483c-8b65-7666169d0218} event:/Trim
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
 {e3492bec-f854-4fbb-b2bc-23586269032e} bus:/Master/Copilot
@@ -14,4 +26,7 @@
 {751f5066-4651-4afb-a410-4cb9db0894c9} bus:/Master/Interior
 {d8526059-b27c-4eae-9b14-a1ee1cb3dfa1} bus:/Master/Radios
 {77575f3b-b9cd-4bff-9056-637cff744a14} bus:/Master/UI
+{19dcbf21-3520-4535-80ad-afbb57833ced} snapshot:/engine_rotation_speed
+{20698f68-fae4-47ba-99f4-09b69b6cf8eb} snapshot:/engine_rpm_mid
+{da766cc7-aa37-4172-a89c-92d9137f3ba9} snapshot:/tireroll
 {69e92124-19d7-4fdb-a960-695eb8b3a758} bank:/Master Bank
