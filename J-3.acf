@@ -148,7 +148,7 @@ P _gear/0/_lonE 0.0
 P _gear/0/_lonN 0.0
 P _gear/0/_lonR 0.0
 P _gear/0/_scon 2811.518310547
-P _gear/0/_stat_def 0.190724090
+P _gear/0/_stat_def 0.190724105
 P _gear/0/_steerdeg_hispeed 0.0
 P _gear/0/_steerdeg_lospeed 0.0
 P _gear/0/_strut_comp -0.500000000
@@ -182,7 +182,7 @@ P _gear/1/_lonE 0.0
 P _gear/1/_lonN 0.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 2811.518310547
-P _gear/1/_stat_def 0.190724090
+P _gear/1/_stat_def 0.190724105
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -216,7 +216,7 @@ P _gear/2/_lonE -50.0
 P _gear/2/_lonN -50.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 401.645477295
-P _gear/2/_stat_def 0.367432386
+P _gear/2/_stat_def 0.367432445
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.0
@@ -10674,7 +10674,7 @@ P _part/85/_top_t1 0.254999995
 P _part/85/_top_t2 0.296000004
 P _part/86/_bot_s1 0.632812500
 P _part/86/_bot_s2 0.753906250
-P _part/86/_bot_t1 0.254882813
+P _part/86/_bot_t1 0.254882812
 P _part/86/_bot_t2 0.295898438
 P _part/86/_geo_xyz/0,0,0 0.0
 P _part/86/_geo_xyz/0,0,1 2.0
@@ -12140,11 +12140,11 @@ P _part/86/_r_dim 10
 P _part/86/_s_dim 8
 P _part/86/_top_s1 0.632812500
 P _part/86/_top_s2 0.753906250
-P _part/86/_top_t1 0.254882813
+P _part/86/_top_t1 0.254882812
 P _part/86/_top_t2 0.295898438
 P _part/87/_bot_s1 0.632812500
 P _part/87/_bot_s2 0.753906250
-P _part/87/_bot_t1 0.254882813
+P _part/87/_bot_t1 0.254882812
 P _part/87/_bot_t2 0.295898438
 P _part/87/_geo_xyz/0,0,0 0.0
 P _part/87/_geo_xyz/0,0,1 2.0
@@ -13601,7 +13601,7 @@ P _part/87/_part_specs_invis 1
 P _part/87/_part_tex 0
 P _part/87/_part_the 0.0
 P _part/87/_part_x 0.0
-P _part/87/_part_y -0.054344237
+P _part/87/_part_y -0.054344177
 P _part/87/_part_z 8.770370483
 P _part/87/_patt_con 0
 P _part/87/_patt_prt 0
@@ -13610,7 +13610,7 @@ P _part/87/_r_dim 10
 P _part/87/_s_dim 8
 P _part/87/_top_s1 0.632812500
 P _part/87/_top_s2 0.753906250
-P _part/87/_top_t1 0.254882813
+P _part/87/_top_t1 0.254882812
 P _part/87/_top_t2 0.295898438
 P _part/9/_bot_s1 0.0
 P _part/9/_bot_s2 0.0
@@ -19881,7 +19881,7 @@ P acf/_mixt_x_ctr 0.0
 P acf/_n1_power_curve1 2.0
 P acf/_n1_power_curve2 3.0
 P acf/_n2_power_curve 3.500000000
-P acf/_name SimSolutions J3Cub
+P acf/_name SimSolutions J3 Cub
 P acf/_new_plot_XP3D_cock/0 0
 P acf/_new_plot_XP3D_cock/1 1
 P acf/_new_plot_XP3D_cock/2 0
@@ -20439,7 +20439,7 @@ P acf/_truck_lon_sep 3.0
 P acf/_tvec_hdng 0.0
 P acf/_tvec_ptch 0.0
 P acf/_tvec_roll 0.0
-P acf/_use_1140_fm 0
+P acf/_use_1140_fm 1
 P acf/_use_cus_gear_damping 0
 P acf/_use_cus_gear_defs 0
 P acf/_use_manual_prop_inc 0
@@ -20587,39 +20587,11 @@ P acf/_yel_lo_xmsn_P 0
 P acf/_yel_lo_xmsn_T 0
 PROPERTIES_END
 PANEL_2D_BEGIN
-g1000_PFD_2d G1000PFD_2d.png
-  POS 252.000000 36.500000
-  DATAREF 
-  SIZE 0.500000
-  LIGHT_MODE MECHANICAL
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 1.000000
-
-g1000_MFD_2d G1000MFD_2d.png
-  POS 960.000000 40.500000
-  DATAREF 
-  SIZE 0.500000
-  LIGHT_MODE MECHANICAL
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 1.000000
-
 PANEL_2D_END
 PANEL_3D_BEGIN
-g1000_PFD_2d G1000PFD_2d.png
-  POS 300.000000 44.000000
+ann_AP_discon ann_AP_discon.png
+  POS 1940.500000 1736.000000
   DATAREF 
-  SIZE 0.500000
-  LIGHT_MODE MECHANICAL
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 1.000000
-
-g1000_MFD_2d G1000MFD_2d.png
-  POS 1008.000000 44.000000
-  DATAREF 
-  SIZE 0.500000
   LIGHT_MODE MECHANICAL
   LIGHT_RHEOSTAT 0
   KEY_FRAME 0.000000 0.000000 1.000000
