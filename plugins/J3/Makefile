@@ -16,6 +16,10 @@ ifeq ($(OS),Windows_NT)
 		-lXPWidgets_64 \
 		-l:libacfutils.a \
 		-l:libglew32mx.a \
+		-l:libfreetype.a \
+		-l:libcairo.a \
+		-l:libz.a \
+		-lopengl32 \
 		-limagehlp \
 		-lPsapi \
 		-lstdc++
@@ -27,7 +31,9 @@ ifeq ($(OS),Windows_NT)
 		-I$(SRC_BASE)/../libs/libacfutils/mingw64/include \
 		-I$(SRC_BASE)/../libs/stb
 
-	DEFINES = -DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM302=1 -DXPLM303=1 -DAPL=0 -DIBM=1 -DLIN=0 -DGLEW_STATIC
+	DEFINES = -DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM302=1 -DXPLM303=1 -DAPL=0 -DIBM=1 -DLIN=0 -DGLEW_STATIC -D_USE_MATH_DEFINES 
+
+	LINK_FLAGS = -static-libgcc -shared -Wl,--version-script=exports.txt
 else 
 	UNAME_S := $(shell uname -s)
 	ifeq ($(UNAME_S),Linux)
@@ -48,21 +54,24 @@ else
 			-I$(SRC_BASE)/../libs/stb
 
 		DEFINES = -DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM302=1 -DXPLM303=1 -DAPL=0 -DIBM=0 -DLIN=1
+
+		LINK_FLAGS = -static-libgcc -shared -Wl,--version-script=exports.txt
 	else
 		TARGET := mac
 		PLATFORM := mac
 
 		LIBS = \
-			-L$(SRC_BASE)/../libs/XSDK/Libraries/Mac \
+			-F$(SRC_BASE)/../libs/XSDK/Libraries/Mac \
 			-L$(SRC_BASE)/../libs/libacfutils/mac64/lib \
-			-lOpengl32 \
-			-lodbc32 \
-			-lodbccp32 \
-			-lXPLM_64 \
-			-lXPWidgets_64 \
-			-l:libacfutils.a \
-			-limagehlp \
-			-lpsapi \
+			-lGLEWmx \
+			-lacfutils \
+			-lfreetype \
+			-lcairo \
+			-lz \
+			-framework XPLM \
+			-framework XPWidgets \
+			-framework OpenGL \
+			-framework CoreFoundation \
 			-lstdc++
 
 		INCLUDES = \
@@ -73,6 +82,8 @@ else
 			-I$(SRC_BASE)/../libs/stb
 
 		DEFINES = -DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM302=1 -DXPLM303=1 -DAPL=1 -DIBM=0 -DLIN=0
+
+		LINK_FLAGS = -shared -Wl,-exported_symbol -Wl,_XPluginStart -Wl,-exported_symbol -Wl,_XPluginEnable -Wl,-exported_symbol -Wl,_XPluginReceiveMessage -Wl,-exported_symbol -Wl,_XPluginDisable -Wl,-exported_symbol -Wl,_XPluginStop
 	endif
 endif
 
@@ -91,7 +102,7 @@ CXXOBJECTS64	:= $(patsubst %.cpp, $(BUILDDIR)/obj64/%.o, $(CXXSOURCES))
 ALL_DEPS64		:= $(sort $(CDEPS64) $(CXXDEPS64))
 ALL_OBJECTS64	:= $(sort $(COBJECTS64) $(CXXOBJECTS64))
 
-CFLAGS := $(DEFINES) $(INCLUDES) -O3 -fPIC -fvisibility=hidden -std=c++17
+CFLAGS := $(DEFINES) $(INCLUDES) -O3 -fPIC -fvisibility=hidden -std=c++17 -Wno-narrowing
 
 
 # Phony directive tells make that these are "virtual" targets, even if a file named "clean" exists.
@@ -110,7 +121,7 @@ $(TARGET): ./64/$(PLATFORM).xpl
 ./64/$(PLATFORM).xpl: $(ALL_OBJECTS64)
 	@echo Linking $@
 	mkdir -p $(dir $@)
-	gcc -m64 -static-libgcc -shared -Wl,--version-script=exports.txt -o $@ $(ALL_OBJECTS64) $(LIBS)
+	gcc -m64 ${LINK_FLAGS} -o $@ $(ALL_OBJECTS64) $(LIBS)
 
 # Compiler rules
 
