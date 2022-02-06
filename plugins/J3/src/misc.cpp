@@ -7,7 +7,7 @@
 
 int showCovers;
 int showGroundClutter;
-int showGun;
+int showGun = 1;
 
 int getCovers(void* inRefcon) { 
 	return showCovers; 
