@@ -82,8 +82,7 @@ BEGIN_SOUND_ATTACHMENT
 	EVENT_NAME /Engine/EngineOff
 	VEH_XYZ 0 -0.060 -0.139
         EVENT_ALLOWED_FOR_AI
-	EVENT_START_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] < 150
-	EVENT_END_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] > 10
+	EVENT_START_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] < 200
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
