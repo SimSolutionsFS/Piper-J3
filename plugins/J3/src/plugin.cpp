@@ -7,6 +7,8 @@
 #include <acfutils/log.h>
 #include <cstring>
 #include "misc.h"
+#include "radio.h"
+#include "radio.cpp"
 
 // Variables
 const char acfVersion[] = "v1.0.0";
@@ -31,14 +33,17 @@ PLUGIN_API int XPluginStart(char* plugin_name, char* plugin_signature, char* plu
 	logMsg("J3 Version: %s", acfVersion);
 
 	miscStart();
+	radioStart();
 
 	return 1;
 }
 PLUGIN_API void	XPluginStop(void) { 	
 	miscStop();
+	radioStop();
 }
 PLUGIN_API void XPluginDisable(void) {}
 PLUGIN_API int  XPluginEnable(void) { 
+	XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
 	logMsg("Creating primary flight loop...");
 	XPLMCreateFlightLoop_t fl_params {
 		sizeof(XPLMCreateFlightLoop_t),
