@@ -43,7 +43,7 @@ XPLMCommandRef radio0 = XPLMCreateCommand("J3/Radio/Num0", "Handheld Radio Press
 XPLMCommandRef radioCLR = XPLMCreateCommand("J3/Radio/CLR", "Handheld Radio Press CLR");
 XPLMCommandRef radiodot = XPLMCreateCommand("J3/Radio/dot", "Handheld Radio Press dot");
 
-char freqBuffer[7];
+char* freqBuffer;
 int pos = 0;
 int fontTextureID;
 
@@ -53,10 +53,8 @@ int loadImage(const std::string &fileName)
 
 	uint8_t *data = stbi_load(fileName.c_str(), &imgWidth, &imgHeight, &nComps, sizeof(uint32_t));
 
-	if (!data)
-	{
-		logMsg("Couldn't load image: ");
-		logMsg(stbi_failure_reason());
+	if (!data) {
+		logMsg("Couldn't load image:  %s", stbi_failure_reason());
 	}
 
 	int id;
@@ -232,7 +230,8 @@ void radioStart()
 
 	fontTextureID = loadImage(absolutePath("plugins/J3/radioscreen.png"));
 	XPLMSetDatai(drefCom1Power, 1);
-	itoa(XPLMGetDatai(drefCom1Radio), freqBuffer, 10);
+	//itoa(XPLMGetDatai(drefCom1Radio), freqBuffer, 10);
+	freqBuffer = (char*)std::to_string(XPLMGetDatai(drefCom1Radio)).c_str();
 	// logMsg("Texture loaded");
 }
 
