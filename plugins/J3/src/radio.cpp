@@ -74,6 +74,20 @@ int loadImage(const std::string &fileName)
 	return id;
 }
 
+char *absolutePath(char *relPath)
+{
+	char rootPath[512];
+	char temp[256];
+	char *name_with_extension;
+	XPLMGetNthAircraftModel(0, temp, rootPath);
+	rootPath[strlen(rootPath) - strlen(temp)] = '\0';
+	name_with_extension = (char *)malloc(strlen(rootPath) + 1 + strlen(relPath));
+	strcpy(name_with_extension, rootPath);
+	strcat(name_with_extension, relPath);
+
+	return name_with_extension;
+}
+
 int radioAppend(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void *inRefcon)
 {
 	int buttonvalue = '-';
@@ -216,22 +230,7 @@ void radioStart()
 
 	XPLMRegisterDrawCallback(radioDraw, xplm_Phase_Gauges, 1, nullptr);
 
-	/* FONTS SETUP */
-	char rootPath[512];
-	char temp[256];
-	char relPath[] = "plugins/J3/radioscreen.png";
-	char *name_with_extension;
-	// logMsg("Variables initialized");
-	XPLMGetNthAircraftModel(0, temp, rootPath);
-	// logMsg("Aircraft model gotten");
-	rootPath[strlen(rootPath) - 7] = '\0'; // Cutting the J-3.acf from the end of the path. Really hope we don't change the filename
-	name_with_extension = (char *)malloc(strlen(rootPath) + 1 + strlen(relPath));
-	// logMsg("Malloc");
-	strcpy(name_with_extension, rootPath);
-	// logMsg("ccpy");
-	strcat(name_with_extension, relPath);
-	// logMsg(name_with_extension);
-	fontTextureID = loadImage(name_with_extension);
+	fontTextureID = loadImage(absolutePath("plugins/J3/radioscreen.png"));
 	XPLMSetDatai(drefCom1Power, 1);
 	itoa(XPLMGetDatai(drefCom1Radio), freqBuffer, 10);
 	// logMsg("Texture loaded");
