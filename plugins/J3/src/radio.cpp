@@ -5,25 +5,31 @@
 #include <XPLMGraphics.h>
 #include <XPLMPlanes.h>
 #include <acfutils/log.h>
-#include <string>
+#include <stdio.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include <stb_image.h>
 
 #include "radio.h"
 
 #if IBM
-#define WIN32_LEAN_AND_MEAN
+	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
+#else
+	#include <string>
 #endif
+
 #if LIN
+	#include <GL/gl.h>
+#elif __MINGW32__
 	#include <GL/gl.h>
 #elif __GNUC__
 	#include <OpenGL/gl.h>
 #else
 	#include <GL/gl.h>
 #endif
-	#ifndef XPLM301
+
+#ifndef XPLM301
 	#error This is made to be compiled against the XPLM300 SDK
 #endif
 
@@ -43,15 +49,15 @@ XPLMCommandRef radio0 = XPLMCreateCommand("J3/Radio/Num0", "Handheld Radio Press
 XPLMCommandRef radioCLR = XPLMCreateCommand("J3/Radio/CLR", "Handheld Radio Press CLR");
 XPLMCommandRef radiodot = XPLMCreateCommand("J3/Radio/dot", "Handheld Radio Press dot");
 
-char* freqBuffer;
+char freqBuffer[10];
 int pos = 0;
 int fontTextureID;
 
-int loadImage(const std::string &fileName)
+int loadImage(const char* fileName)
 {
 	int imgWidth, imgHeight, nComps;
 
-	uint8_t *data = stbi_load(fileName.c_str(), &imgWidth, &imgHeight, &nComps, sizeof(uint32_t));
+	uint8_t *data = stbi_load(fileName, &imgWidth, &imgHeight, &nComps, sizeof(uint32_t));
 
 	if (!data) {
 		logMsg("Couldn't load image:  %s", stbi_failure_reason());
@@ -230,9 +236,12 @@ void radioStart()
 
 	fontTextureID = loadImage(absolutePath("plugins/J3/radioscreen.png"));
 	XPLMSetDatai(drefCom1Power, 1);
-	//itoa(XPLMGetDatai(drefCom1Radio), freqBuffer, 10);
+	
+	#if IBM
+	itoa(XPLMGetDatai(drefCom1Radio), freqBuffer, 10);
+	#else
 	freqBuffer = (char*)std::to_string(XPLMGetDatai(drefCom1Radio)).c_str();
-	// logMsg("Texture loaded");
+	#endif
 }
 
 void radioStop()

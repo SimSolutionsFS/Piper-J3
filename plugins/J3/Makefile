@@ -3,7 +3,8 @@ SRC_BASE	:=	./src
 
 SOURCES = \
 	plugin.cpp \
-	misc.cpp
+	misc.cpp \
+	radio.cpp
 
 ifeq ($(OS),Windows_NT)
 	TARGET      := win

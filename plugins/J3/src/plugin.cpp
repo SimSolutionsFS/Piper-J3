@@ -5,10 +5,10 @@
 #include <XPLMMenus.h>
 #include <XPLMDataAccess.h>
 #include <acfutils/log.h>
+#include <acfutils/except.h>
 #include <cstring>
 #include "misc.h"
 #include "radio.h"
-#include "radio.cpp"
 
 // Variables
 const char acfVersion[] = "v1.0.0";
@@ -32,6 +32,8 @@ PLUGIN_API int XPluginStart(char* plugin_name, char* plugin_signature, char* plu
 	log_init(logString, "SimSolutions J3");
 	logMsg("J3 Version: %s", acfVersion);
 
+	except_init();
+
 	miscStart();
 	radioStart();
 
@@ -40,6 +42,8 @@ PLUGIN_API int XPluginStart(char* plugin_name, char* plugin_signature, char* plu
 PLUGIN_API void	XPluginStop(void) { 	
 	miscStop();
 	radioStop();
+
+	except_fini();
 }
 PLUGIN_API void XPluginDisable(void) {}
 PLUGIN_API int  XPluginEnable(void) { 
