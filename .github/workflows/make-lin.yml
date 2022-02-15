@@ -1,0 +1,30 @@
+name: Build for Linux
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-ubuntu:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Clone fpw/XSDK
+      run: git clone https://github.com/fpw/XSDK
+      working-directory: ./plugins/DA40/libs
+    
+    - name: Clone nothings/stb
+      run: git clone https://github.com/nothings/stb
+      working-directory: ./plugins/DA40/libs
+    
+    - name: Install other dependancies
+      run: sudo apt-get install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev -y
+
+    - name: Compile
+      run: make
+      working-directory: ./plugins/DA40
+      
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: Ubuntu Build
