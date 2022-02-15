@@ -19,7 +19,7 @@ jobs:
       working-directory: ./plugins/J3/libs
     
     - name: Install other dependancies
-      run: sudo apt-get install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev -y
+      run: sudo apt-get update && sudo apt-get install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev -y --fix-missing
 
     - name: Compile
       run: make
