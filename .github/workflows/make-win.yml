@@ -12,18 +12,18 @@ jobs:
     
     - name: Clone fpw/XSDK
       run: git clone https://github.com/fpw/XSDK
-      working-directory: ./plugins/DA40/libs
+      working-directory: ./plugins/J3/libs
     
     - name: Clone nothings/stb
       run: git clone https://github.com/nothings/stb
-      working-directory: ./plugins/DA40/libs
+      working-directory: ./plugins/J3/libs
     
     - name: Install MinGW
       uses: egor-tensin/setup-mingw@v2
 
     - name: Compile
       run: make
-      working-directory: ./plugins/DA40
+      working-directory: ./plugins/J3
       
     - uses: stefanzweifel/git-auto-commit-action@v4
       with:
