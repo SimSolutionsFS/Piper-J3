@@ -240,7 +240,17 @@ void radioStart()
 	#if IBM
 	itoa(XPLMGetDatai(drefCom1Radio), freqBuffer, 10);
 	#else
-	freqBuffer = (char*)std::to_string(XPLMGetDatai(drefCom1Radio)).c_str();
+	// This may be the dumbest thing I have ever written
+	freqBuffer[0] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[0];
+	freqBuffer[1] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[1];
+	freqBuffer[2] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[2];
+	freqBuffer[3] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[3];
+	freqBuffer[4] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[4];
+	freqBuffer[5] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[5];
+	freqBuffer[6] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[6];
+	freqBuffer[7] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[7];
+	freqBuffer[8] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[8];
+	freqBuffer[9] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[9];
 	#endif
 }
 
