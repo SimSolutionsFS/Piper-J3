@@ -91,7 +91,7 @@ char *absolutePath(char *relPath)
         
         // We need to first find where the first slash is
         int slashPos;
-        for (int i = 0; i < rootPath.length(); i++) {
+		for (int i = 0; i < strlen(rootPath); i++) {
             if (rootPath[i] == ':') {
                 slashPos = i;
                 break;
@@ -99,10 +99,11 @@ char *absolutePath(char *relPath)
         }
 
         // Now to delete everything that comes before it
-        rootPath.erase(rootPath.begin(), rootPath.begin() + slashPos);
+        //rootPath.erase(rootPath.begin(), rootPath.begin() + slashPos);
+		memmove(rootPath, rootPath + slashPos, strlen(rootPath + slashPos));
 
         // NOW we can replace all ":" with "/"
-        for (int i = 0; i < rootPath.length(); i++) {
+        for (int i = 0; i < strlen(rootPath); i++) {
             if (rootPath[i] == ':') {
                 rootPath[i] = '/';
             }
