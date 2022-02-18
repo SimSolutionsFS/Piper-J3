@@ -84,6 +84,31 @@ char *absolutePath(char *relPath)
 	char temp[256];
 	char *name_with_extension;
 	XPLMGetNthAircraftModel(0, temp, rootPath);
+
+	// Original snippet: https://github.com/SimSolutions1/SimSolutions-DA40/blob/13e8888bee09bc0f81355233415620ac21cce17a/plugins/DA40/src/simdraw.cpp#L163-L184
+	#if APL
+        // On macOS, we have to do something really dumb to get a useable file path.
+        
+        // We need to first find where the first slash is
+        int slashPos;
+        for (int i = 0; i < rootPath.length(); i++) {
+            if (rootPath[i] == ':') {
+                slashPos = i;
+                break;
+            }
+        }
+
+        // Now to delete everything that comes before it
+        rootPath.erase(rootPath.begin(), rootPath.begin() + slashPos);
+
+        // NOW we can replace all ":" with "/"
+        for (int i = 0; i < rootPath.length(); i++) {
+            if (rootPath[i] == ':') {
+                rootPath[i] = '/';
+            }
+        }
+    #endif 
+
 	rootPath[strlen(rootPath) - strlen(temp)] = '\0';
 	name_with_extension = (char *)malloc(strlen(rootPath) + 1 + strlen(relPath));
 	strcpy(name_with_extension, rootPath);
