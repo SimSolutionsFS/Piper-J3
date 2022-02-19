@@ -59,6 +59,8 @@ int loadImage(const char* fileName)
 
 	uint8_t *data = stbi_load(fileName, &imgWidth, &imgHeight, &nComps, sizeof(uint32_t));
 
+	logMsg("Filename in loadImage:  %s", fileName);
+
 	if (!data) {
 		logMsg("Couldn't load image:  %s", stbi_failure_reason());
 	}
@@ -85,6 +87,11 @@ char *absolutePath(char *relPath)
 	char *name_with_extension;
 	XPLMGetNthAircraftModel(0, temp, rootPath);
 
+	logMsg("absolutePath() - original relPath:  %s", relPath);
+
+	logMsg("absolutePath() - original rootPath:  %s", rootPath);
+	logMsg("absolutePath() - original temp:  %s", temp);
+
 	// Original snippet: https://github.com/SimSolutions1/SimSolutions-DA40/blob/13e8888bee09bc0f81355233415620ac21cce17a/plugins/DA40/src/simdraw.cpp#L163-L184
 	#if APL
         // On macOS, we have to do something really dumb to get a useable file path.
@@ -97,11 +104,11 @@ char *absolutePath(char *relPath)
                 break;
             }
         }
-
+	logMsg("absolutePath() - slashPos:  %i", slashPos);
         // Now to delete everything that comes before it
-        //rootPath.erase(rootPath.begin(), rootPath.begin() + slashPos);
 		memmove(rootPath, rootPath + slashPos, strlen(rootPath + slashPos));
 
+	logMsg("absolutePath() - rootPath after memmove:  %i", rootPath);
         // NOW we can replace all ":" with "/"
         for (int i = 0; i < strlen(rootPath); i++) {
             if (rootPath[i] == ':') {
@@ -110,10 +117,15 @@ char *absolutePath(char *relPath)
         }
     #endif 
 
+	logMsg("absolutePath() - rootPath after APL:  %s", rootPath);
+
 	rootPath[strlen(rootPath) - strlen(temp)] = '\0';
+	logMsg("absolutePath() - rootPath after shorten:  %s", rootPath);
 	name_with_extension = (char *)malloc(strlen(rootPath) + 1 + strlen(relPath));
 	strcpy(name_with_extension, rootPath);
 	strcat(name_with_extension, relPath);
+
+	logMsg("absolutePath() returns:  %s", name_with_extension);
 
 	return name_with_extension;
 }
