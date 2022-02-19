@@ -282,5 +282,15 @@ void radioStop()
 {
 	logMsg("Unregistering radio commands...");
 	XPLMUnregisterCommandHandler(radio1, radioAppend, 1, nullptr);
+	XPLMUnregisterCommandHandler(radio2, radioAppend, 1, nullptr);
+	XPLMUnregisterCommandHandler(radio3, radioAppend, 1, nullptr);
+	XPLMUnregisterCommandHandler(radio4, radioAppend, 1, nullptr);
+	XPLMUnregisterCommandHandler(radio5, radioAppend, 1, nullptr);
+	XPLMUnregisterCommandHandler(radio6, radioAppend, 1, nullptr);
+	XPLMUnregisterCommandHandler(radio7, radioAppend, 1, nullptr);
+	XPLMUnregisterCommandHandler(radio8, radioAppend, 1, nullptr);
+	XPLMUnregisterCommandHandler(radio9, radioAppend, 1, nullptr);
+	XPLMUnregisterCommandHandler(radio0, radioAppend, 1, nullptr);
+	XPLMUnregisterCommandHandler(radioCLR, radioAppend, 1, nullptr);
 	XPLMUnregisterDrawCallback(radioDraw, xplm_Phase_Gauges, 1, nullptr);
 }
