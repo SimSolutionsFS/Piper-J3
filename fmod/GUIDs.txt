@@ -11,10 +11,10 @@
 {baebc989-e5b7-40ee-ac20-c90ac2695836} event:/Door
 {8ec58216-84e9-4ddc-b7e3-189dade15e0a} event:/Elevator
 {a3ccbd50-5e9e-4b61-85da-d5546e2ab5d1} event:/FuelSelect
+{bff4142e-e02a-4ab3-93b9-82975010c139} event:/Mags
 {8cfbc0e4-c6ac-49f9-903f-14a9449b436d} event:/ThrottleClick
 {447dcdca-29e9-407d-b201-6f14ebb2ee0e} event:/TireL
 {38c25ff8-88be-47a0-83f0-50199e077fc8} event:/TireR
-{234334c8-68a6-49b4-bd3a-3b77f13ae5f9} event:/TireRoll
 {d7a31cd1-e6cb-483c-8b65-7666169d0218} event:/Trim
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
@@ -29,4 +29,7 @@
 {19dcbf21-3520-4535-80ad-afbb57833ced} snapshot:/engine_rotation_speed
 {20698f68-fae4-47ba-99f4-09b69b6cf8eb} snapshot:/engine_rpm_mid
 {da766cc7-aa37-4172-a89c-92d9137f3ba9} snapshot:/tireroll
+{add2ce77-341a-4e56-82bd-187712ed88d3} snapshot:/EngineMuffled
+{405a5b9e-8a0a-4475-aba1-317fc95e3449} snapshot:/EngineUnmuffle
+{acb43fa6-fe2a-43b3-9ec3-67a921169231} snapshot:/TireScreech
 {69e92124-19d7-4fdb-a960-695eb8b3a758} bank:/Master Bank

@@ -43,6 +43,34 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
+        EVENT_NAME /Mags
+        VEH_XYZ -0.30 0.059 -0.139
+        EVENT_START_COND ABS_DELTA=sim/cockpit2/engine/actuators/ignition_key[0] != 0
+        EVENT_END_COND
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+        EVENT_NAME /Mags
+        VEH_XYZ -0.30 0.059 -0.139
+        EVENT_START_COND ABS_DELTA=sim/cockpit2/engine/actuators/ignition_key[0] != 1
+        EVENT_END_COND
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+        EVENT_NAME /Mags
+        VEH_XYZ -0.30 0.059 -0.139
+        EVENT_START_COND ABS_DELTA=sim/cockpit2/engine/actuators/ignition_key[0] != 2
+        EVENT_END_COND
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+        EVENT_NAME /Mags
+        VEH_XYZ -0.30 0.059 -0.139
+        EVENT_START_COND ABS_DELTA=sim/cockpit2/engine/actuators/ignition_key[0] != 3
+        EVENT_END_COND
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
 	EVENT_NAME /Cowling
 	VEH_XYZ 0.00 -0.059 0.00
 	EVENT_START_COND sim/flightmodel2/misc/door_open_ratio[1] > 0.01
@@ -114,6 +142,18 @@ BEGIN_SOUND_ATTACHMENT
 	EVENT_ALLOWED_FOR_AI
 	EVENT_START_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] > 200
 	EVENT_END_COND sim/cockpit2/engine/indicators/prop_speed_rpm[0] < 200
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+    SNAPSHOT_NAME /EngineMuffled
+    EVENT_START_COND sim/graphics/view/view_is_external == 0
+    EVENT_END_COND sim/graphics/view/view_is_external == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+    SNAPSHOT_NAME /EngineUnmuffle
+    EVENT_START_COND ABS_DELTA=sim/flightmodel2/misc/door_open_ratio[2] > 0
+    EVENT_END_COND ABS_DELTA=sim/flightmodel2/misc/door_open_ratio[2] < 1
 END_SOUND_ATTACHMENT
 
 #############
@@ -202,14 +242,14 @@ BEGIN_SOUND_ATTACHMENT
 	EVENT_END_COND
 END_SOUND_ATTACHMENT
 
-#################
-ENVIRONMENT
-#################
+BEGIN_SOUND_ATTACHMENT
+    SNAPSHOT_NAME /TireScreech
+    EVENT_START_COND ABS_DELTA=sim/flightmodel2/gear/tire_rotation_speed_rad_sec[1] > 1
+    EVENT_END_COND
+END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-	EVENT_NAME /TireRoll
-	VEH_XYZ 0 -0.90 -0.139
-	EVENT_ALLOWED_FOR_AI
-	EVENT_START_COND sim/cockpit2/gauges/indicators/airspeed_kts_stby[0] > 1
-	EVENT_END_COND sim/cockpit2/gauges/indicators/airspeed_kts_stby[0] < 1
+    SNAPSHOT_NAME /TireScreech
+    EVENT_START_COND ABS_DELTA=sim/flightmodel2/gear/tire_rotation_speed_rad_sec[0] > 1
+    EVENT_END_COND
 END_SOUND_ATTACHMENT
