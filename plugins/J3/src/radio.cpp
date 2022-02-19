@@ -106,9 +106,9 @@ char *absolutePath(char *relPath)
         }
 	logMsg("absolutePath() - slashPos:  %i", slashPos);
         // Now to delete everything that comes before it
-		memmove(rootPath, rootPath + slashPos, strlen(rootPath + slashPos));
+		memmove(rootPath, rootPath + slashPos, strlen(rootPath) + slashPos);
 
-	logMsg("absolutePath() - rootPath after memmove:  %i", rootPath);
+	logMsg("absolutePath() - rootPath after memmove:  %s", rootPath);
         // NOW we can replace all ":" with "/"
         for (int i = 0; i < strlen(rootPath); i++) {
             if (rootPath[i] == ':') {
