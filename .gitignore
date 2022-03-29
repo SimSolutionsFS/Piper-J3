@@ -10,5 +10,9 @@ plugins/J3/src/.vscode/launch.json
 plugins/OpenGPWS/airport.cache/*
 
 # X-Plane stuff we dont want
-J-3.acf~
-J-3_prefs.txt
+J3.acf~
+J3_prefs.txt
+J3-Floats.acf~
+J3-Floats_prefs.txt
+J3-Tundra.acf~
+J3-Tundra_prefs.txt

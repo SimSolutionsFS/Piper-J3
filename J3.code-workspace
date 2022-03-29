@@ -7,11 +7,5 @@
 			"path": "."
 		}
 	],
-	"settings": {
-		"files.associations": {
-			"Makefile-win": "makefile",
-			"string": "cpp",
-			"xstring": "cpp"
-		}
-	}
+	"settings": {}
 }
