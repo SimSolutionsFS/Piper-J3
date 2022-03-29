@@ -9,6 +9,7 @@ int showCovers;
 int showGroundClutter;
 int showGun = 1;
 int showWheelPants;
+int waterRudderLowered = 0;
 
 int getCovers(void* inRefcon) { 
 	return showCovers; 
@@ -34,11 +35,19 @@ int getWheelPants(void* inRefcon) {
 void setWheelPants(void* inRefcon, int inValue) {
 	showWheelPants = inValue;
 }
+int getWaterRudderLowered(void* inRefcon) {
+	return waterRudderLowered;
+}
+void setWaterRudderLowered(void* inRefcon, int inValue) {
+	waterRudderLowered = inValue;
+}
 
 XPLMDataRef drefShowGun = XPLMRegisterDataAccessor("J3/Ground/ShowGun", xplmType_Int, true, getGun, setGun, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 XPLMDataRef drefShowTiedowns = XPLMRegisterDataAccessor("J3/Ground/ShowCovers", xplmType_Int, true, getCovers, setCovers, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 XPLMDataRef drefShowGroundClutter = XPLMRegisterDataAccessor("J3/Ground/ShowClutter", xplmType_Int, true, getShowGroundClutter, setShowGroundClutter, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 XPLMDataRef drefWheelPants = XPLMRegisterDataAccessor("J3/Options/WheelPants", xplmType_Int, true, getWheelPants, setWheelPants, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
+XPLMDataRef drefWaterRudder = XPLMRegisterDataAccessor("J3/WaterRudder/IsLowered", xplmType_Int, true, getWaterRudderLowered, setWaterRudderLowered, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
+
 XPLMDataRef drefBatteryPowered = XPLMFindDataRef("sim/cockpit/electrical/battery_on");
 
 int toggleCovers(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon) {
@@ -90,10 +99,24 @@ int toggleWheelPants(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* i
 	return 1;
 }
 
+int toggleWaterRudder(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon) {
+	if (inPhase == 0) {
+		if (waterRudderLowered == 1) {
+			waterRudderLowered = 0;
+		}
+		else {
+			waterRudderLowered = 1;
+		}
+	}
+
+	return 1;
+}
+
 XPLMCommandRef commandCovers = XPLMCreateCommand("J3/Ground/ToggleCovers", "Toggle Covers");
 XPLMCommandRef commandToggleClutter = XPLMCreateCommand("J3/Ground/ToggleClutter", "Toggle Ground Clutter");
 XPLMCommandRef commandToggleGun = XPLMCreateCommand("J3/Ground/ToggleGun", "Toggle Gun");
 XPLMCommandRef commandToggleWheelPants = XPLMCreateCommand("J3/Ground/ToggleWheelPants", "Toggle Wheel Pants");
+XPLMCommandRef commandWaterRudder = XPLMCreateCommand("J3/WaterRudder/Toggle", "Toggle the water rudder");
 
 void miscStart() {
 	logMsg("Registering commands...");
@@ -101,6 +124,7 @@ void miscStart() {
 	XPLMRegisterCommandHandler(commandToggleClutter, toggleClutter, 1, nullptr);
 	XPLMRegisterCommandHandler(commandToggleGun, toggleGun, 1, nullptr);
 	XPLMRegisterCommandHandler(commandToggleWheelPants, toggleWheelPants, 1, nullptr);
+	XPLMRegisterCommandHandler(commandWaterRudder, toggleWaterRudder, 1, nullptr);
 
 	logMsg("Adding items to aircraft menu...");
 	XPLMMenuID aircraft_menu = XPLMFindAircraftMenu();
@@ -120,4 +144,5 @@ void miscStop() {
 	XPLMUnregisterCommandHandler(commandToggleClutter, toggleClutter, 1, nullptr);
 	XPLMUnregisterCommandHandler(commandToggleGun, toggleGun, 1, nullptr);
 	XPLMUnregisterCommandHandler(commandToggleWheelPants, toggleWheelPants, 1, nullptr);
+	XPLMUnregisterCommandHandler(commandWaterRudder, toggleWaterRudder, 1, nullptr);
 }
