@@ -47,8 +47,9 @@ XPLMDataRef drefShowTiedowns = XPLMRegisterDataAccessor("J3/Ground/ShowCovers", 
 XPLMDataRef drefShowGroundClutter = XPLMRegisterDataAccessor("J3/Ground/ShowClutter", xplmType_Int, true, getShowGroundClutter, setShowGroundClutter, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 XPLMDataRef drefWheelPants = XPLMRegisterDataAccessor("J3/Options/WheelPants", xplmType_Int, true, getWheelPants, setWheelPants, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 XPLMDataRef drefWaterRudder = XPLMRegisterDataAccessor("J3/WaterRudder/IsLowered", xplmType_Int, true, getWaterRudderLowered, setWaterRudderLowered, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
-
 XPLMDataRef drefBatteryPowered = XPLMFindDataRef("sim/cockpit/electrical/battery_on");
+XPLMDataRef drefEngineRunning = XPLMFindDataRef("sim/flightmodel/engine/ENGN_running");
+XPLMDataRef drefWheelsOnGround = XPLMFindDataRef("sim/flightmodel2/gear/on_ground");
 
 int toggleCovers(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon) {
 	if (inPhase == 0) {
@@ -134,7 +135,24 @@ void miscStart() {
 	}
 }
 
+int engineIsRunning;
+int wheelOnGround;
 void miscRefresh() {
+	// Clear chocks & tent if engine is running
+	XPLMGetDatavi(drefEngineRunning, &engineIsRunning, 0, 1);
+	XPLMGetDatavi(drefWheelsOnGround, &wheelOnGround, 4, 1);
+
+	if ((engineIsRunning == 1) && ((showCovers == 0) || (showGroundClutter == 0))) {
+		logMsg("Engine running with covers or clutter set, removing!");
+		showCovers = 1; 
+		showGroundClutter = 1;
+	}
+
+	if ((wheelOnGround == 0) && (showGroundClutter == 0)) {
+		logMsg("Wheels off ground with clutter set, removing!");
+		showGroundClutter = 1;
+	}
+
 	XPLMSetDatai(drefBatteryPowered, 1);
 }
 

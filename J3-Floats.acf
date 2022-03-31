@@ -218,7 +218,7 @@ P _gear/4/_lonE 0.0
 P _gear/4/_lonN 0.0
 P _gear/4/_lonR 0.0
 P _gear/4/_scon 2811.499755859
-P _gear/4/_stat_def 0.196778670
+P _gear/4/_stat_def 0.196778685
 P _gear/4/_steerdeg_hispeed 1.0
 P _gear/4/_steerdeg_lospeed 0.0
 P _gear/4/_strut_comp 1.0
@@ -252,7 +252,7 @@ P _gear/5/_lonE 0.0
 P _gear/5/_lonN 0.0
 P _gear/5/_lonR 0.0
 P _gear/5/_scon 2811.499755859
-P _gear/5/_stat_def 0.196778670
+P _gear/5/_stat_def 0.196778685
 P _gear/5/_steerdeg_hispeed 1.0
 P _gear/5/_steerdeg_lospeed 0.0
 P _gear/5/_strut_comp 1.0
@@ -27960,7 +27960,7 @@ P acf/_vect_power_for 1.0
 P acf/_vect_rate 15.0
 P acf/_vectarmY 0.0
 P acf/_vectarmZ 0.0
-P acf/_version v1.0.0
+P acf/_version v1.0.1
 P acf/_vvi_but_adjusts_pitch 0
 P acf/_warn_airliner 0
 P acf/_warn_alt_app_100 0
