@@ -9,7 +9,8 @@ int showCovers;
 int showGroundClutter;
 int showGun = 1;
 int showWheelPants;
-int waterRudderLowered = 0;
+float waterRudderLowered = 0;
+bool lowerWaterRudder;
 
 int getCovers(void* inRefcon) { 
 	return showCovers; 
@@ -35,10 +36,10 @@ int getWheelPants(void* inRefcon) {
 void setWheelPants(void* inRefcon, int inValue) {
 	showWheelPants = inValue;
 }
-int getWaterRudderLowered(void* inRefcon) {
+float getWaterRudderLowered(void* inRefcon) {
 	return waterRudderLowered;
 }
-void setWaterRudderLowered(void* inRefcon, int inValue) {
+void setWaterRudderLowered(void* inRefcon, float inValue) {
 	waterRudderLowered = inValue;
 }
 
@@ -46,7 +47,7 @@ XPLMDataRef drefShowGun = XPLMRegisterDataAccessor("J3/Ground/ShowGun", xplmType
 XPLMDataRef drefShowTiedowns = XPLMRegisterDataAccessor("J3/Ground/ShowCovers", xplmType_Int, true, getCovers, setCovers, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 XPLMDataRef drefShowGroundClutter = XPLMRegisterDataAccessor("J3/Ground/ShowClutter", xplmType_Int, true, getShowGroundClutter, setShowGroundClutter, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 XPLMDataRef drefWheelPants = XPLMRegisterDataAccessor("J3/Options/WheelPants", xplmType_Int, true, getWheelPants, setWheelPants, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
-XPLMDataRef drefWaterRudder = XPLMRegisterDataAccessor("J3/WaterRudder/IsLowered", xplmType_Int, true, getWaterRudderLowered, setWaterRudderLowered, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
+XPLMDataRef drefWaterRudder = XPLMRegisterDataAccessor("J3/WaterRudder/IsLowered", xplmType_Float, true, nullptr, nullptr, getWaterRudderLowered, setWaterRudderLowered, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 XPLMDataRef drefBatteryPowered = XPLMFindDataRef("sim/cockpit/electrical/battery_on");
 XPLMDataRef drefEngineRunning = XPLMFindDataRef("sim/flightmodel/engine/ENGN_running");
 XPLMDataRef drefWheelsOnGround = XPLMFindDataRef("sim/flightmodel2/gear/on_ground");
@@ -99,15 +100,9 @@ int toggleWheelPants(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* i
 
 	return 1;
 }
-
 int toggleWaterRudder(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon) {
 	if (inPhase == 0) {
-		if (waterRudderLowered == 1) {
-			waterRudderLowered = 0;
-		}
-		else {
-			waterRudderLowered = 1;
-		}
+		lowerWaterRudder = !lowerWaterRudder;
 	}
 
 	return 1;
@@ -153,6 +148,18 @@ void miscRefresh() {
 		showGroundClutter = 1;
 	}
 
+	if (lowerWaterRudder) {
+		waterRudderLowered = waterRudderLowered + 0.01f;
+		if (waterRudderLowered > 1) {
+			waterRudderLowered = 1;
+		}
+	}
+	else {
+		waterRudderLowered = waterRudderLowered - 0.01f;
+		if (waterRudderLowered < 0) {
+			waterRudderLowered = 0;
+		}
+	}
 	XPLMSetDatai(drefBatteryPowered, 1);
 }
 
