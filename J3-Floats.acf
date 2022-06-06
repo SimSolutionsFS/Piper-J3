@@ -26612,7 +26612,6 @@ P acf/_cyclic_up_trim_rat 0.0
 P acf/_deg_psi_per_deg_def 1.0
 P acf/_deg_the_per_deg_def 6.0
 P acf/_delta3 0.0
-P acf/_descrip SimSolutions J3 Cub - Floats
 P acf/_diff_coll_with_hdng 0.0
 P acf/_diff_coll_with_ptch 0.0
 P acf/_diff_coll_with_roll 0.0
@@ -27961,7 +27960,7 @@ P acf/_vect_power_for 1.0
 P acf/_vect_rate 15.0
 P acf/_vectarmY 0.0
 P acf/_vectarmZ 0.0
-P acf/_version v1.0.2
+P acf/_version v1.0.1
 P acf/_vvi_but_adjusts_pitch 0
 P acf/_warn_airliner 0
 P acf/_warn_alt_app_100 0
