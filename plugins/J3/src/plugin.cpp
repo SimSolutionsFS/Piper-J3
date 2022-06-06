@@ -11,7 +11,7 @@
 #include "radio.h"
 
 // Variables
-const char acfVersion[] = "v1.0.1";
+const char acfVersion[] = "v1.0.2";
 XPLMFlightLoopID mainFlightLoop;
 
 // Callbacks

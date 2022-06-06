@@ -2,7 +2,7 @@
 #include <XPLMUtilities.h>
 #include <XPLMMenus.h>
 #include <acfutils/log.h>
-
+#include <acfutils/dr.h>
 #include "misc.h"
 
 int showCovers;
@@ -11,6 +11,7 @@ int showGun = 1;
 int showWheelPants;
 float waterRudderLowered = 0;
 bool lowerWaterRudder;
+bool isFloats;
 
 int getCovers(void* inRefcon) { 
 	return showCovers; 
@@ -51,6 +52,7 @@ XPLMDataRef drefWaterRudder = XPLMRegisterDataAccessor("J3/WaterRudder/IsLowered
 XPLMDataRef drefBatteryPowered = XPLMFindDataRef("sim/cockpit/electrical/battery_on");
 XPLMDataRef drefEngineRunning = XPLMFindDataRef("sim/flightmodel/engine/ENGN_running");
 XPLMDataRef drefWheelsOnGround = XPLMFindDataRef("sim/flightmodel2/gear/on_ground");
+dr_t drefAcfDescription;
 
 int toggleCovers(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon) {
 	if (inPhase == 0) {
@@ -115,6 +117,8 @@ XPLMCommandRef commandToggleWheelPants = XPLMCreateCommand("J3/Ground/ToggleWhee
 XPLMCommandRef commandWaterRudder = XPLMCreateCommand("J3/WaterRudder/Toggle", "Toggle the water rudder");
 
 void miscStart() {
+	dr_find(&drefAcfDescription, "sim/aircraft/view/acf_descrip");
+
 	logMsg("Registering commands...");
 	XPLMRegisterCommandHandler(commandCovers, toggleCovers, 1, nullptr);
 	XPLMRegisterCommandHandler(commandToggleClutter, toggleClutter, 1, nullptr);
@@ -128,6 +132,13 @@ void miscStart() {
 		XPLMAppendMenuItemWithCommand(aircraft_menu, "Toggle Covers", commandCovers);
 		XPLMAppendMenuItemWithCommand(aircraft_menu, "Toggle Ground Clutter", commandToggleClutter);
 	}
+
+	char acfDescription[29];
+	dr_gets(&drefAcfDescription, acfDescription, sizeof(acfDescription));
+
+	if (strcmp(acfDescription, "SimSolutions J3 Cub - Floats") == 0) {
+		isFloats = true;
+	} 
 }
 
 int engineIsRunning;
@@ -135,7 +146,12 @@ int wheelOnGround;
 void miscRefresh() {
 	// Clear chocks & tent if engine is running
 	XPLMGetDatavi(drefEngineRunning, &engineIsRunning, 0, 1);
-	XPLMGetDatavi(drefWheelsOnGround, &wheelOnGround, 4, 1);
+	if (isFloats) {
+		XPLMGetDatavi(drefWheelsOnGround, &wheelOnGround, 4, 1);
+	}
+	else {
+		XPLMGetDatavi(drefWheelsOnGround, &wheelOnGround, 0, 1);
+	}
 
 	if ((engineIsRunning == 1) && ((showCovers == 0) || (showGroundClutter == 0))) {
 		logMsg("Engine running with covers or clutter set, removing!");
