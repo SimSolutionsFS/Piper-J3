@@ -1,3 +1,4 @@
+#include <XPLMPlugin.h>
 #include <XPLMDataAccess.h>
 #include <XPLMUtilities.h>
 #include <XPLMMenus.h>
@@ -242,6 +243,7 @@ int radioDraw(XPLMDrawingPhase inPhase, int inIsBefore, void *inRefcon)
 
 void radioStart()
 {
+	XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
 	logMsg("Registering radio commands...");
 	XPLMRegisterCommandHandler(radio1, radioAppend, 1, nullptr);
 	XPLMRegisterCommandHandler(radio2, radioAppend, 1, nullptr);

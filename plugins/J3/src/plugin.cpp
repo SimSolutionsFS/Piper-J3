@@ -1,5 +1,4 @@
 // Includes
-#include <XPLMPlugin.h>
 #include <XPLMUtilities.h>
 #include <XPLMProcessing.h>
 #include <XPLMMenus.h>
@@ -7,21 +6,21 @@
 #include <acfutils/log.h>
 #include <acfutils/except.h>
 #include <cstring>
+
 #include "misc.h"
 #include "radio.h"
 
-// Variables
 const char acfVersion[] = "v1.0.2";
 XPLMFlightLoopID mainFlightLoop;
 
 // Callbacks
-void logString(const char* string) {
-	XPLMDebugString(string);
-}
-
 float fl_main_update(float elapsedMe, float elapsedSim, int counter, void* refcon) {
 	miscRefresh();
 	return -1;
+}
+
+void logString(const char* string) {
+	XPLMDebugString(string);
 }
 
 PLUGIN_API int XPluginStart(char* plugin_name, char* plugin_signature, char* plugin_description) {
@@ -39,15 +38,20 @@ PLUGIN_API int XPluginStart(char* plugin_name, char* plugin_signature, char* plu
 
 	return 1;
 }
+
 PLUGIN_API void	XPluginStop(void) { 	
 	miscStop();
 	radioStop();
 
 	except_fini();
 }
-PLUGIN_API void XPluginDisable(void) {}
+
+PLUGIN_API void XPluginDisable(void) {
+	logMsg("Destroying primary flight loop...");
+	XPLMDestroyFlightLoop(mainFlightLoop);
+}
+
 PLUGIN_API int  XPluginEnable(void) { 
-	XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
 	logMsg("Creating primary flight loop...");
 	XPLMCreateFlightLoop_t fl_params {
 		sizeof(XPLMCreateFlightLoop_t),
@@ -60,4 +64,5 @@ PLUGIN_API int  XPluginEnable(void) {
 
 	return 1; 
 }
+
 PLUGIN_API void XPluginReceiveMessage(XPLMPluginID inFrom, int inMsg, void* inParam) {}
