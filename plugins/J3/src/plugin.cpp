@@ -1,8 +1,6 @@
 // Includes
-#include <XPLMUtilities.h>
 #include <XPLMProcessing.h>
 #include <XPLMMenus.h>
-#include <XPLMDataAccess.h>
 #include <acfutils/log.h>
 #include <acfutils/except.h>
 #include <cstring>

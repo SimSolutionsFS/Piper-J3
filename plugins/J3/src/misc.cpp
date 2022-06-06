@@ -1,10 +1,11 @@
+// Includes
 #include <XPLMDataAccess.h>
-#include <XPLMUtilities.h>
 #include <XPLMMenus.h>
 #include <acfutils/log.h>
 #include <acfutils/dr.h>
 #include "misc.h"
 
+// Variables
 int showCovers;
 int showGroundClutter;
 int showGun = 1;
@@ -13,6 +14,10 @@ float waterRudderLowered = 0;
 bool lowerWaterRudder;
 bool isFloats;
 
+int engineIsRunning;
+int wheelOnGround;
+
+// Datarefs
 dr_t drefShowGun;
 dr_t drefShowCovers;
 dr_t drefShowClutter;
@@ -23,6 +28,7 @@ dr_t drefEngineRunning;
 dr_t drefWheelsonGround;
 dr_t drefAcfDescription;
 
+// Commands
 int toggleCovers(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon) {
 	if (inPhase == 0) {
 		showCovers = !showCovers;
@@ -58,13 +64,13 @@ int toggleWaterRudder(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* 
 
 	return 1;
 }
-
 XPLMCommandRef commandCovers = XPLMCreateCommand("J3/Ground/ToggleCovers", "Toggle Covers");
 XPLMCommandRef commandToggleClutter = XPLMCreateCommand("J3/Ground/ToggleClutter", "Toggle Ground Clutter");
 XPLMCommandRef commandToggleGun = XPLMCreateCommand("J3/Ground/ToggleGun", "Toggle Gun");
 XPLMCommandRef commandToggleWheelPants = XPLMCreateCommand("J3/Ground/ToggleWheelPants", "Toggle Wheel Pants");
 XPLMCommandRef commandWaterRudder = XPLMCreateCommand("J3/WaterRudder/Toggle", "Toggle the water rudder");
 
+// Callbacks
 void miscStart() {
 	dr_create_i(&drefShowGun, &showGun, true, "J3/Ground/ShowGun");
 	dr_create_i(&drefShowCovers, &showCovers, true, "J3/Ground/ShowCovers");
@@ -98,8 +104,6 @@ void miscStart() {
 	} 
 }
 
-int engineIsRunning;
-int wheelOnGround;
 void miscRefresh() {
 	// Clear chocks & tent if engine is running
 	dr_getvi(&drefEngineRunning, &engineIsRunning, 0, 1);

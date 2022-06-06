@@ -218,7 +218,7 @@ P _gear/4/_lonE 0.0
 P _gear/4/_lonN 0.0
 P _gear/4/_lonR 0.0
 P _gear/4/_scon 2811.499755859
-P _gear/4/_stat_def 0.196778685
+P _gear/4/_stat_def 0.196778700
 P _gear/4/_steerdeg_hispeed 1.0
 P _gear/4/_steerdeg_lospeed 0.0
 P _gear/4/_strut_comp 1.0
@@ -252,7 +252,7 @@ P _gear/5/_lonE 0.0
 P _gear/5/_lonN 0.0
 P _gear/5/_lonR 0.0
 P _gear/5/_scon 2811.499755859
-P _gear/5/_stat_def 0.196778685
+P _gear/5/_stat_def 0.196778700
 P _gear/5/_steerdeg_hispeed 1.0
 P _gear/5/_steerdeg_lospeed 0.0
 P _gear/5/_strut_comp 1.0
@@ -286,7 +286,7 @@ P _gear/6/_lonE 0.0
 P _gear/6/_lonN 0.0
 P _gear/6/_lonR 0.0
 P _gear/6/_scon 351.437469482
-P _gear/6/_stat_def 0.161524862
+P _gear/6/_stat_def 0.161524847
 P _gear/6/_steerdeg_hispeed 1.0
 P _gear/6/_steerdeg_lospeed 50.0
 P _gear/6/_strut_comp 1.0
@@ -320,7 +320,7 @@ P _gear/7/_lonE 0.0
 P _gear/7/_lonN 0.0
 P _gear/7/_lonR 0.0
 P _gear/7/_scon 351.437469482
-P _gear/7/_stat_def 0.161524862
+P _gear/7/_stat_def 0.161524847
 P _gear/7/_steerdeg_hispeed 1.0
 P _gear/7/_steerdeg_lospeed 50.0
 P _gear/7/_strut_comp 1.0
@@ -26612,6 +26612,7 @@ P acf/_cyclic_up_trim_rat 0.0
 P acf/_deg_psi_per_deg_def 1.0
 P acf/_deg_the_per_deg_def 6.0
 P acf/_delta3 0.0
+P acf/_descrip SimSolutions J3 Cub - Floats
 P acf/_diff_coll_with_hdng 0.0
 P acf/_diff_coll_with_ptch 0.0
 P acf/_diff_coll_with_roll 0.0
@@ -27960,7 +27961,7 @@ P acf/_vect_power_for 1.0
 P acf/_vect_rate 15.0
 P acf/_vectarmY 0.0
 P acf/_vectarmZ 0.0
-P acf/_version v1.0.1
+P acf/_version v1.0.2
 P acf/_vvi_but_adjusts_pitch 0
 P acf/_warn_airliner 0
 P acf/_warn_alt_app_100 0
