@@ -3375,8 +3375,8 @@ IDX	2924
 	TRIS	1686 795
 	ANIM_begin
 	ANIM_trans_begin	sim/cockpit2/engine/actuators/carb_heat_ratio[0]
-	ANIM_trans_key	0	0.33432001	-0.13685	1.24016
-	ANIM_trans_key	1	0.33432001	-0.13685	1.22825
+	ANIM_trans_key	0	0.33432001	-0.13685	1.18837
+	ANIM_trans_key	1	0.33432001	-0.13685	1.20675
 	ANIM_trans_end
 		ATTR_manip_drag_axis_pix	hand	200	0.0099999998	1	0	4	sim/cockpit2/engine/actuators/carb_heat_ratio[0]	
 		TRIS	966 36
