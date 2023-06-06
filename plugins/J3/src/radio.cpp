@@ -241,7 +241,7 @@ int radioDraw(XPLMDrawingPhase inPhase, int inIsBefore, void *inRefcon)
 	return 1;
 }
 
-void radioStart()
+void radio_start()
 {
 	XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
 	logMsg("Registering radio commands...");
@@ -280,7 +280,7 @@ void radioStart()
 	#endif
 }
 
-void radioStop()
+void radio_stop()
 {
 	logMsg("Unregistering radio commands...");
 	XPLMUnregisterCommandHandler(radio1, radioAppend, 1, nullptr);

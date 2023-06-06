@@ -1,150 +1,135 @@
-// Includes
-#include <XPLMDataAccess.h>
+/*
+ * misc.cpp
+ *
+ * This registers and handles datarefs & commands,
+ * as well as validates some visual options based
+ * on the state of the aircraft.
+ */
 #include <XPLMMenus.h>
 #include <acfutils/log.h>
 #include <acfutils/dr.h>
+#include <acfutils/cmd.h>
 #include "misc.h"
 
 // Variables
-int showCovers;
-int showGroundClutter;
-int showGun = 1;
-int showWheelPants;
-float waterRudderLowered = 0;
-bool lowerWaterRudder;
-bool isFloats;
-
-int engineIsRunning;
-int wheelOnGround;
+int show_covers;
+int show_gnd_clutter;
+int show_gun = true;
+int show_wheel_pants;
+float water_rudder_pos = 0;
+bool water_rudder_lower;
+bool on_floats;
+int eng_running;
+int wow;
 
 // Datarefs
-dr_t drefShowGun;
-dr_t drefShowCovers;
-dr_t drefShowClutter;
-dr_t drefWheelPants;
-dr_t drefWaterRudder;
-dr_t drefBatteryPowered;
-dr_t drefEngineRunning;
-dr_t drefWheelsonGround;
-dr_t drefAcfDescription;
+dr_t dr_show_gun;
+dr_t dr_show_covers;
+dr_t dr_show_clutter;
+dr_t dr_show_wheel_pants;
+dr_t dr_water_rudder;
+dr_t dr_xp_batt;
+dr_t dr_eng_running;
+dr_t dr_wow;
+dr_t dr_acf_desc;
 
 // Commands
-int toggleCovers(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon) {
-	if (inPhase == 0) {
-		showCovers = !showCovers;
-	}
+XPLMCommandRef cmd_toggle_covers = XPLMCreateCommand("J3/Ground/ToggleCovers", "Toggle Covers");
+XPLMCommandRef cmd_toggle_clutter = XPLMCreateCommand("J3/Ground/ToggleClutter", "Toggle Ground Clutter");
+XPLMCommandRef cmd_toggle_gun = XPLMCreateCommand("J3/Ground/ToggleGun", "Toggle Gun");
+XPLMCommandRef cmd_toggle_wheel_pants = XPLMCreateCommand("J3/Ground/ToggleWheelPants", "Toggle Wheel Pants");
+XPLMCommandRef cmd_water_rudder = XPLMCreateCommand("J3/WaterRudder/Toggle", "Toggle the water rudder");
 
-	return 1;
-}
-int toggleClutter(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon) {
-	if (inPhase == 0) {
-		showGroundClutter = !showGroundClutter;
-	}
+// Handle toggle commands
+int cmd_handler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon) {
+    if (inCommand == cmd_toggle_covers) {
+        show_covers = !show_covers;
+    }
+    else if (inCommand == cmd_toggle_clutter) {
+        show_gnd_clutter = !show_gnd_clutter;
+    }
+    else if (inCommand == cmd_toggle_gun) {
+        show_gun = !show_gun;
+    }
+    else if (inCommand == cmd_toggle_wheel_pants) {
+        show_wheel_pants = !show_wheel_pants;
+    }
+    else if (inCommand == cmd_water_rudder) {
+        water_rudder_lower = !water_rudder_lower;
+    }
 
-	return 1;
-}
-int toggleGun(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon) {
-	if (inPhase == 0) {
-		showGun = !showGun;
-	}
-
-	return 1;
-}
-int toggleWheelPants(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon) {
-	if (inPhase == 0) {
-		showWheelPants = !showWheelPants;
-	}
-
-	return 1;
-}
-int toggleWaterRudder(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void* inRefcon) {
-	if (inPhase == 0) {
-		lowerWaterRudder = !lowerWaterRudder;
-	}
-
-	return 1;
-}
-XPLMCommandRef commandCovers = XPLMCreateCommand("J3/Ground/ToggleCovers", "Toggle Covers");
-XPLMCommandRef commandToggleClutter = XPLMCreateCommand("J3/Ground/ToggleClutter", "Toggle Ground Clutter");
-XPLMCommandRef commandToggleGun = XPLMCreateCommand("J3/Ground/ToggleGun", "Toggle Gun");
-XPLMCommandRef commandToggleWheelPants = XPLMCreateCommand("J3/Ground/ToggleWheelPants", "Toggle Wheel Pants");
-XPLMCommandRef commandWaterRudder = XPLMCreateCommand("J3/WaterRudder/Toggle", "Toggle the water rudder");
-
-// Callbacks
-void miscStart() {
-	dr_create_i(&drefShowGun, &showGun, true, "J3/Ground/ShowGun");
-	dr_create_i(&drefShowCovers, &showCovers, true, "J3/Ground/ShowCovers");
-	dr_create_i(&drefShowClutter, &showGroundClutter, true, "J3/Ground/ShowClutter");
-	dr_create_i(&drefWheelPants, &showWheelPants, true, "J3/Options/WheelPants");
-	dr_create_f(&drefWaterRudder, &waterRudderLowered, true, "J3/WaterRudder/IsLowered");
-	dr_find(&drefBatteryPowered, "sim/cockpit/electrical/battery_on");
-	dr_find(&drefEngineRunning, "sim/flightmodel/engine/ENGN_running");
-	dr_find(&drefWheelsonGround, "sim/flightmodel2/gear/on_ground");
-	dr_find(&drefAcfDescription, "sim/aircraft/view/acf_descrip");
-
-	logMsg("Registering commands...");
-	XPLMRegisterCommandHandler(commandCovers, toggleCovers, 1, nullptr);
-	XPLMRegisterCommandHandler(commandToggleClutter, toggleClutter, 1, nullptr);
-	XPLMRegisterCommandHandler(commandToggleGun, toggleGun, 1, nullptr);
-	XPLMRegisterCommandHandler(commandToggleWheelPants, toggleWheelPants, 1, nullptr);
-	XPLMRegisterCommandHandler(commandWaterRudder, toggleWaterRudder, 1, nullptr);
-
-	logMsg("Adding items to aircraft menu...");
-	XPLMMenuID aircraft_menu = XPLMFindAircraftMenu();
-	if (aircraft_menu) {
-		XPLMAppendMenuItemWithCommand(aircraft_menu, "Toggle Covers", commandCovers);
-		XPLMAppendMenuItemWithCommand(aircraft_menu, "Toggle Ground Clutter", commandToggleClutter);
-	}
-
-	char acfDescription[29];
-	dr_gets(&drefAcfDescription, acfDescription, sizeof(acfDescription));
-
-	if (strcmp(acfDescription, "SimSolutions J3 Cub - Floats") == 0) {
-		isFloats = true;
-	} 
+    return 1;
 }
 
-void miscRefresh() {
-	// Clear chocks & tent if engine is running
-	dr_getvi(&drefEngineRunning, &engineIsRunning, 0, 1);
-	if (isFloats) {
-		dr_getvi(&drefWheelsonGround, &wheelOnGround, 4, 1);
+void misc_start() {
+    // Create & fetch datarefs
+	dr_create_i(&dr_show_gun, &show_gun, true, "J3/Ground/ShowGun");
+	dr_create_i(&dr_show_covers, &show_covers, true, "J3/Ground/ShowCovers");
+	dr_create_i(&dr_show_clutter, &show_gnd_clutter, true, "J3/Ground/ShowClutter");
+	dr_create_i(&dr_show_wheel_pants, &show_wheel_pants, true, "J3/Options/WheelPants");
+	dr_create_f(&dr_water_rudder, &water_rudder_pos, true, "J3/WaterRudder/IsLowered");
+	dr_find(&dr_xp_batt, "sim/cockpit/electrical/battery_on");
+	dr_find(&dr_eng_running, "sim/flightmodel/engine/ENGN_running");
+	dr_find(&dr_wow, "sim/flightmodel2/gear/on_ground");
+	dr_find(&dr_acf_desc, "sim/aircraft/view/acf_descrip");
+
+    // Register commands
+    cmd_bind("J3/Ground/ToggleCovers", cmd_handler, true, nullptr);
+    cmd_bind("J3/Ground/ToggleClutter", cmd_handler, true, nullptr);
+    cmd_bind("J3/Ground/ToggleGun", cmd_handler, true, nullptr);
+    cmd_bind("J3/Ground/ToggleWheelPants", cmd_handler, true, nullptr);
+    cmd_bind("J3/WaterRudder/Toggle", cmd_handler, true, nullptr);
+
+	// Set up aircraft menu
+	XPLMMenuID acf_menu = XPLMFindAircraftMenu();
+	if (acf_menu) {
+		XPLMAppendMenuItemWithCommand(acf_menu, "Toggle Covers", cmd_toggle_covers);
+		XPLMAppendMenuItemWithCommand(acf_menu, "Toggle Ground Clutter", cmd_toggle_clutter);
 	}
-	else {
-		dr_getvi(&drefWheelsonGround, &wheelOnGround, 0, 1);
-	}
-	
-	if ((engineIsRunning == 1) && ((showCovers == 0) || (showGroundClutter == 0))) {
+
+    // Determine if this is the floats variant of the aircraft
+	char acf_desc[128];
+	dr_gets(&dr_acf_desc, acf_desc, sizeof(acf_desc));
+    on_floats = (strcmp(acf_desc, "SimSolutions J3 Cub - Floats") == 0);
+}
+
+void misc_ref() {
+	// Remove chocks & tent if engine is running
+	dr_getvi(&dr_eng_running, &eng_running, 0, 1);
+    dr_getvi(&dr_wow, &wow, (4 * on_floats), 1);
+	if ((eng_running == 1) && ((show_covers == 0) || (show_gnd_clutter == 0))) {
 		logMsg("Engine running with covers or clutter set, removing!");
-		showCovers = 1; 
-		showGroundClutter = 1;
+        show_covers = 1;
+        show_gnd_clutter = 1;
 	}
-	else if ((wheelOnGround == 0) && (showGroundClutter == 0)) {
+	else if ((wow == 0) && (show_gnd_clutter == 0)) {
 		logMsg("Wheels off ground with clutter set, removing!");
-		showGroundClutter = 1;
+        show_gnd_clutter = 1;
 	}
 
-	if (lowerWaterRudder) {
-		waterRudderLowered = waterRudderLowered + 0.01f;
-		if (waterRudderLowered > 1) {
-			waterRudderLowered = 1;
+    // Handle the water rudder
+	if (water_rudder_lower) {
+        water_rudder_pos = water_rudder_pos + 0.01f;
+		if (water_rudder_pos > 1) {
+            water_rudder_pos = 1;
 		}
 	}
 	else {
-		waterRudderLowered = waterRudderLowered - 0.01f;
-		if (waterRudderLowered < 0) {
-			waterRudderLowered = 0;
+        water_rudder_pos = water_rudder_pos - 0.01f;
+		if (water_rudder_pos < 0) {
+            water_rudder_pos = 0;
 		}
 	}
 
-	dr_seti(&drefBatteryPowered, 1);
+    // Force X-Plane to think the battery is constantly on
+	dr_seti(&dr_xp_batt, 1);
 }
 
-void miscStop() {
-	logMsg("Unregistering commands...");
-	XPLMUnregisterCommandHandler(commandCovers, toggleCovers, 1, nullptr);
-	XPLMUnregisterCommandHandler(commandToggleClutter, toggleClutter, 1, nullptr);
-	XPLMUnregisterCommandHandler(commandToggleGun, toggleGun, 1, nullptr);
-	XPLMUnregisterCommandHandler(commandToggleWheelPants, toggleWheelPants, 1, nullptr);
-	XPLMUnregisterCommandHandler(commandWaterRudder, toggleWaterRudder, 1, nullptr);
+void misc_stop() {
+	// Unregister commands
+    cmd_unbind("J3/Ground/ToggleCovers", cmd_handler, true, nullptr);
+    cmd_unbind("J3/Ground/ToggleClutter", cmd_handler, true, nullptr);
+    cmd_unbind("J3/Ground/ToggleGun", cmd_handler, true, nullptr);
+    cmd_unbind("J3/Ground/ToggleWheelPants", cmd_handler, true, nullptr);
+    cmd_unbind("J3/WaterRudder/Toggle", cmd_handler, true, nullptr);
 }

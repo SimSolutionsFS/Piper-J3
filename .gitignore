@@ -1,19 +1,8 @@
-# GCC/G++ stuff we don't want
-plugins/J3/64/obj64/*
-plugins/J3/64/lin/*
-
 # CMake stuff we don't want
 plugins/J3/CMakeFiles
 plugins/J3/cmake_install.cmake
 plugins/J3/CMakeCache.txt
 plugins/J3/Makefile
-
-# Plugin-related folders we dont want
-plugins/J3/Debug/*
-plugins/J3/x64/*
-plugins/J3/packages/*
-plugins/J3/src/.vscode/launch.json
-plugins/OpenGPWS/airport.cache/*
 
 # X-Plane stuff we dont want
 J3.acf~

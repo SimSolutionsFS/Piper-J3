@@ -1,153 +1,45 @@
 name: Compile
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ "*" ]
 
 jobs:
-  Mac:
-    runs-on: macos-10.15
-
+  Compile:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+    
+    runs-on: ${{matrix.os}}
+    
     steps:
-    - uses: actions/checkout@v3
-    - run: git pull origin main
-    
-    - name: Clone fpw/XSDK
-      run: git clone https://github.com/fpw/XSDK
-      working-directory: ./plugins/J3/libs
-    
-    - name: Clone nothings/stb
-      run: git clone https://github.com/nothings/stb
-      working-directory: ./plugins/J3/libs
+      - uses: actions/checkout@v3.5.2
+        with:
+          submodules: recursive
+          token: ${{ secrets.GIT_TOKEN }}
 
-    - name: Fetch libacfutils redistributable
-      uses: dsaltares/fetch-gh-release-asset@master
-      with:
-        repo: 'skiselkov/libacfutils'
-        version: 'tags/v0.32'
-        file: 'libacfutils-redist-v0.32.zip'
-        token: ${{ secrets.GITHUB_TOKEN }}
-      
-    - name: Extract libacfutils
-      run: unzip libacfutils-redist-v0.32.zip -d ./plugins/J3/libs
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt update && sudo apt install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev -y
 
-    - name: Rename libacfutils folder
-      run: mv -f ./plugins/J3/libs/libacfutils-redist-v0.32/* ./plugins/J3/libs/libacfutils/ && rm -r ./plugins/J3/libs/libacfutils-redist-v0.32/
+      - name: Configure CMake (Windows)
+        if: runner.os == 'Windows'
+        run: cmake . -G "MinGW Makefiles"
+        working-directory: plugins/J3
 
-    - name: Clean up libacfutils file
-      run: rm libacfutils-redist-v0.32.zip
-      
-    - name: Configure CMake
-      run: cmake .
-      working-directory: ./plugins/J3
+      - name: Configure CMake (*nix)
+        if: runner.os != 'Windows'
+        run: cmake .
+        working-directory: plugins/J3
 
-    - name: Build
-      run: cmake --build .
-      working-directory: ./plugins/J3
-    
-    - uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: Mac Build
+      - name: Compile plugin
+        run: cmake --build .
+        working-directory: plugins/J3
 
-  Linux:
-    runs-on: ubuntu-20.04
-    needs: Mac
-
-    steps:
-    - uses: actions/checkout@v3
-    - run: git pull origin main
-
-    - name: Clone fpw/XSDK
-      run: git clone https://github.com/fpw/XSDK
-      working-directory: ./plugins/J3/libs
-    
-    - name: Clone nothings/stb
-      run: git clone https://github.com/nothings/stb
-      working-directory: ./plugins/J3/libs
-
-    - name: Fetch libacfutils redistributable
-      uses: dsaltares/fetch-gh-release-asset@master
-      with:
-        repo: 'skiselkov/libacfutils'
-        version: 'tags/v0.32'
-        file: 'libacfutils-redist-v0.32.zip'
-        token: ${{ secrets.GITHUB_TOKEN }}
-      
-    - name: Extract libacfutils
-      run: unzip libacfutils-redist-v0.32.zip -d ./plugins/J3/libs
-
-    - name: Rename libacfutils folder
-      run: mv ./plugins/J3/libs/libacfutils-redist-v0.32/* ./plugins/J3/libs/libacfutils/ --force && rm -r ./plugins/J3/libs/libacfutils-redist-v0.32/
-      
-    - name: Clean up libacfutils file
-      run: rm libacfutils-redist-v0.32.zip
-
-    - name: Install other dependancies
-      run: sudo apt-get install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev -y
-  
-    - name: Configure CMake
-      run: cmake .
-      working-directory: ./plugins/J3
-
-    - name: Build
-      run: cmake --build .
-      working-directory: ./plugins/J3
-    
-    - uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: Linux Build
-        
-  Windows:
-    runs-on: windows-2019
-    needs: Linux
-
-    steps:
-    - uses: actions/checkout@v3
-    - run: git pull origin main
-    
-    - uses: msys2/setup-msys2@v2
-      with:
-        update: true
-        install: >-
-          mingw-w64-x86_64-cmake
-          mingw-w64-x86_64-ninja
-          mingw-w64-x86_64-msmpi
-    - name: Put MSYS2_MinGW64 on PATH
-      # there is not yet an environment variable for this path from msys2/setup-msys2
-      run: echo "${{ runner.temp }}/msys64/mingw64/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-    - name: Clone fpw/XSDK
-      run: git clone https://github.com/fpw/XSDK
-      working-directory: ./plugins/J3/libs
-
-    - name: Clone nothings/stb
-      run: git clone https://github.com/nothings/stb
-      working-directory: ./plugins/J3/libs
-
-    - name: Fetch libacfutils redistributable
-      uses: dsaltares/fetch-gh-release-asset@master
-      with:
-        repo: 'skiselkov/libacfutils'
-        version: 'tags/v0.32'
-        file: 'libacfutils-redist-v0.32.zip'
-        token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Extract libacfutils
-      run: tar -xf libacfutils-redist-v0.32.zip -C ./plugins/J3/libs
-
-    - name: Rename libacfutils folder
-      run: mv ./plugins/J3/libs/libacfutils-redist-v0.32/* ./plugins/J3/libs/libacfutils/ && rm -r ./plugins/J3/libs/libacfutils-redist-v0.32/
-
-    - name: Clean up libacfutils file
-      run: rm libacfutils-redist-v0.32.zip
-
-    - name: Configure CMake
-      run: cmake . -G "MinGW Makefiles"
-      working-directory: ./plugins/J3
-
-    - name: Build
-      run: cmake --build .
-      working-directory: ./plugins/J3
-
-    - uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: Windows Build
+      - uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ${{runner.os}} Binaries
+          path: plugins/J3/64/*.xpl
