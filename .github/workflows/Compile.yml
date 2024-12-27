@@ -12,22 +12,26 @@ jobs:
           - ubuntu-latest
           - windows-latest
           - macos-latest
-    
+
     runs-on: ${{matrix.os}}
-    
+
     steps:
-      - uses: actions/checkout@v3.5.2
+      - uses: actions/checkout@v4.1.1
         with:
           submodules: recursive
           token: ${{ secrets.GIT_TOKEN }}
 
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
-        run: sudo apt update && sudo apt install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev -y
+        run: sudo apt update && sudo apt install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev libfreetype-dev -y
+
+      - name: Install Windows dependencies
+        if: runner.os == 'Windows'
+        run: vcpkg integrate install && vcpkg install freetype
 
       - name: Configure CMake (Windows)
         if: runner.os == 'Windows'
-        run: cmake . -G "MinGW Makefiles"
+        run: cmake . -G="MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
         working-directory: plugins/J3
 
       - name: Configure CMake (*nix)
@@ -35,11 +39,24 @@ jobs:
         run: cmake .
         working-directory: plugins/J3
 
-      - name: Compile plugin
+      - name: Compile
         run: cmake --build .
         working-directory: plugins/J3
 
-      - uses: actions/upload-artifact@v3.1.2
+      - uses: actions/upload-artifact@v4.2.0
+        if: runner.os == 'Linux'
         with:
-          name: ${{runner.os}} Binaries
-          path: plugins/J3/64/*.xpl
+          name: build-lin
+          path: plugins/J3/64/lin.xpl
+
+      - uses: actions/upload-artifact@v4.2.0
+        if: runner.os == 'Windows'
+        with:
+          name: build-win
+          path: plugins/J3/64/win.xpl
+
+      - uses: actions/upload-artifact@v4.2.0
+        if: runner.os == 'macOS'
+        with:
+          name: build-macOS
+          path: plugins/J3/64/mac.xpl
