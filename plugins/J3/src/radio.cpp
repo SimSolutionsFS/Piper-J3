@@ -1,17 +1,17 @@
-#include <XPLMPlugin.h>
-#include <XPLMDataAccess.h>
-#include <XPLMUtilities.h>
-#include <XPLMMenus.h>
+#include "radio.h"
+
+#include <stdio.h>
 #include <XPLMDisplay.h>
 #include <XPLMGraphics.h>
 #include <XPLMPlanes.h>
+#include <XPLMPlugin.h>
+#include <XPLMUtilities.h>
+#include <acfutils/cmd.h>
+#include <acfutils/dr.h>
 #include <acfutils/log.h>
-#include <stdio.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-
-#include "radio.h"
 
 #if IBM
 	#define WIN32_LEAN_AND_MEAN
@@ -34,8 +34,8 @@
 	#error This is made to be compiled against the XPLM300 SDK
 #endif
 
-XPLMDataRef drefCom1Radio = XPLMFindDataRef("sim/cockpit2/radios/actuators/com1_frequency_hz_833");
-XPLMDataRef drefCom1Power = XPLMFindDataRef("sim/cockpit2/radios/actuators/com1_power");
+dr_t dr_com1_radio;
+dr_t dr_com1_power;
 
 XPLMCommandRef radio1   = XPLMCreateCommand("J3/Radio/Num1", "Handheld Radio Press 1");
 XPLMCommandRef radio2   = XPLMCreateCommand("J3/Radio/Num2", "Handheld Radio Press 2");
@@ -79,34 +79,11 @@ int loadImage(const char *fileName) {
 }
 
 char *absolutePath(char *relPath) {
+	XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
 	char rootPath[512];
 	char temp[256];
 	char *name_with_extension;
 	XPLMGetNthAircraftModel(0, temp, rootPath);
-
-	// Original snippet: https://github.com/SimSolutions1/SimSolutions-DA40/blob/13e8888bee09bc0f81355233415620ac21cce17a/plugins/DA40/src/simdraw.cpp#L163-L184
-#if APL
-        // On macOS, we have to do something really dumb to get a useable file path.
-
-        // We need to first find where the first slash is
-        int slashPos;
-		for (int i = 0; i < strlen(rootPath); i++) {
-            if (rootPath[i] == ':') {
-                slashPos = i;
-                break;
-            }
-        }
-        // Now to delete everything that comes before it
-		memmove(rootPath, rootPath + slashPos, strlen(rootPath) + slashPos);
-
-        // NOW we can replace all ":" with "/"
-        for (int i = 0; i < strlen(rootPath); i++) {
-            if (rootPath[i] == ':') {
-                rootPath[i] = '/';
-            }
-        }
-#endif
-
 
 	rootPath[strlen(rootPath) - strlen(temp)] = '\0';
 	name_with_extension                       = (char *)malloc(strlen(rootPath) + 1 + strlen(relPath));
@@ -150,7 +127,7 @@ int radioAppend(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void *inRefc
 		}
 		if (pos > 5) {
 			pos = 0;
-			XPLMSetDatai(drefCom1Radio, atoi(freqBuffer));
+			dr_seti(&dr_com1_radio, atoi(freqBuffer));
 		}
 	}
 	return 1;
@@ -231,40 +208,28 @@ int radioDraw(XPLMDrawingPhase inPhase, int inIsBefore, void *inRefcon) {
 }
 
 void radio_start() {
-	XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
 	logMsg("Registering radio commands...");
-	XPLMRegisterCommandHandler(radio1, radioAppend, 1, nullptr);
-	XPLMRegisterCommandHandler(radio2, radioAppend, 1, nullptr);
-	XPLMRegisterCommandHandler(radio3, radioAppend, 1, nullptr);
-	XPLMRegisterCommandHandler(radio4, radioAppend, 1, nullptr);
-	XPLMRegisterCommandHandler(radio5, radioAppend, 1, nullptr);
-	XPLMRegisterCommandHandler(radio6, radioAppend, 1, nullptr);
-	XPLMRegisterCommandHandler(radio7, radioAppend, 1, nullptr);
-	XPLMRegisterCommandHandler(radio8, radioAppend, 1, nullptr);
-	XPLMRegisterCommandHandler(radio9, radioAppend, 1, nullptr);
-	XPLMRegisterCommandHandler(radio0, radioAppend, 1, nullptr);
-	XPLMRegisterCommandHandler(radioCLR, radioAppend, 1, nullptr);
+	for (int i = 0; i <= 9; i++) {
+		cmd_bind("J3/Radio/Num%i", radioAppend, 1, NULL, i);
+	}
+	cmd_bind("J3/Radio/CLR", radioAppend, 1, nullptr);
 	// XPLMRegisterCommandHandler(radiodot, radioAppend, 1, nullptr);
 
 	XPLMRegisterDrawCallback(radioDraw, xplm_Phase_Gauges, 1, nullptr);
 
 	fontTextureID = loadImage(absolutePath("plugins/J3/radioscreen.png"));
-	XPLMSetDatai(drefCom1Power, 1);
+
+	dr_find(&dr_com1_radio, "sim/cockpit2/radios/actuators/com1_frequency_hz_833");
+	dr_find(&dr_com1_power, "sim/cockpit2/radios/actuators/com1_power");
+
+	dr_seti(&dr_com1_power, 1);
 
 #if IBM
 	itoa(XPLMGetDatai(drefCom1Radio), freqBuffer, 10);
 #else
-	// This may be the dumbest thing I have ever written
-	freqBuffer[0] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[0];
-	freqBuffer[1] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[1];
-	freqBuffer[2] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[2];
-	freqBuffer[3] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[3];
-	freqBuffer[4] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[4];
-	freqBuffer[5] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[5];
-	freqBuffer[6] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[6];
-	freqBuffer[7] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[7];
-	freqBuffer[8] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[8];
-	freqBuffer[9] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[9];
+	for (int i = 0; i <= 9; i++) {
+		freqBuffer[i] = std::to_string(dr_geti(&dr_com1_radio)).c_str()[i];
+	}
 #endif
 }
 

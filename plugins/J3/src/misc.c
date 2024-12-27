@@ -5,20 +5,21 @@
  * as well as validates some visual options based
  * on the state of the aircraft.
  */
-#include <XPLMMenus.h>
-#include <acfutils/log.h>
-#include <acfutils/dr.h>
-#include <acfutils/cmd.h>
 #include "misc.h"
+
+#include <XPLMMenus.h>
+#include <acfutils/cmd.h>
+#include <acfutils/dr.h>
+#include <acfutils/log.h>
 
 // Variables
 int show_covers;
 int show_gnd_clutter;
-int show_gun = true;
+int show_gun = 1;
 int show_wheel_pants;
 float water_rudder_pos = 0;
-bool water_rudder_lower;
-bool on_floats;
+int water_rudder_lower = 0;
+int on_floats          = 0;
 int eng_running;
 int wow;
 
@@ -34,11 +35,11 @@ dr_t dr_wow;
 dr_t dr_acf_desc;
 
 // Commands
-XPLMCommandRef cmd_toggle_covers      = XPLMCreateCommand("J3/Ground/ToggleCovers", "Toggle Covers");
-XPLMCommandRef cmd_toggle_clutter     = XPLMCreateCommand("J3/Ground/ToggleClutter", "Toggle Ground Clutter");
-XPLMCommandRef cmd_toggle_gun         = XPLMCreateCommand("J3/Ground/ToggleGun", "Toggle Gun");
-XPLMCommandRef cmd_toggle_wheel_pants = XPLMCreateCommand("J3/Ground/ToggleWheelPants", "Toggle Wheel Pants");
-XPLMCommandRef cmd_water_rudder       = XPLMCreateCommand("J3/WaterRudder/Toggle", "Toggle the water rudder");
+XPLMCommandRef cmd_toggle_covers;
+XPLMCommandRef cmd_toggle_clutter;
+XPLMCommandRef cmd_toggle_gun;
+XPLMCommandRef cmd_toggle_wheel_pants;
+XPLMCommandRef cmd_water_rudder;
 
 // Handle toggle commands
 int cmd_handler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void *inRefcon) {
@@ -63,22 +64,27 @@ int cmd_handler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void *inRefc
 
 void misc_start() {
 	// Create & fetch datarefs
-	dr_create_i(&dr_show_gun, &show_gun, true, "J3/Ground/ShowGun");
-	dr_create_i(&dr_show_covers, &show_covers, true, "J3/Ground/ShowCovers");
-	dr_create_i(&dr_show_clutter, &show_gnd_clutter, true, "J3/Ground/ShowClutter");
-	dr_create_i(&dr_show_wheel_pants, &show_wheel_pants, true, "J3/Options/WheelPants");
-	dr_create_f(&dr_water_rudder, &water_rudder_pos, true, "J3/WaterRudder/IsLowered");
+	dr_create_i(&dr_show_gun, &show_gun, 1, "J3/Ground/ShowGun");
+	dr_create_i(&dr_show_covers, &show_covers, 1, "J3/Ground/ShowCovers");
+	dr_create_i(&dr_show_clutter, &show_gnd_clutter, 1, "J3/Ground/ShowClutter");
+	dr_create_i(&dr_show_wheel_pants, &show_wheel_pants, 1, "J3/Options/WheelPants");
+	dr_create_f(&dr_water_rudder, &water_rudder_pos, 1, "J3/WaterRudder/IsLowered");
 	dr_find(&dr_xp_batt, "sim/cockpit/electrical/battery_on");
 	dr_find(&dr_eng_running, "sim/flightmodel/engine/ENGN_running");
 	dr_find(&dr_wow, "sim/flightmodel2/gear/on_ground");
 	dr_find(&dr_acf_desc, "sim/aircraft/view/acf_descrip");
 
-	// Register commands
-	cmd_bind("J3/Ground/ToggleCovers", cmd_handler, true, nullptr);
-	cmd_bind("J3/Ground/ToggleClutter", cmd_handler, true, nullptr);
-	cmd_bind("J3/Ground/ToggleGun", cmd_handler, true, nullptr);
-	cmd_bind("J3/Ground/ToggleWheelPants", cmd_handler, true, nullptr);
-	cmd_bind("J3/WaterRudder/Toggle", cmd_handler, true, nullptr);
+	// Create & register commands
+	cmd_toggle_covers      = XPLMCreateCommand("J3/Ground/ToggleCovers", "Toggle Covers");
+	cmd_toggle_clutter     = XPLMCreateCommand("J3/Ground/ToggleClutter", "Toggle Ground Clutter");
+	cmd_toggle_gun         = XPLMCreateCommand("J3/Ground/ToggleGun", "Toggle Gun");
+	cmd_toggle_wheel_pants = XPLMCreateCommand("J3/Ground/ToggleWheelPants", "Toggle Wheel Pants");
+	cmd_water_rudder       = XPLMCreateCommand("J3/WaterRudder/Toggle", "Toggle the water rudder");
+	cmd_bind("J3/Ground/ToggleCovers", cmd_handler, 1, NULL);
+	cmd_bind("J3/Ground/ToggleClutter", cmd_handler, 1, NULL);
+	cmd_bind("J3/Ground/ToggleGun", cmd_handler, 1, NULL);
+	cmd_bind("J3/Ground/ToggleWheelPants", cmd_handler, 1, NULL);
+	cmd_bind("J3/WaterRudder/Toggle", cmd_handler, 1, NULL);
 
 	// Set up aircraft menu
 	XPLMMenuID acf_menu = XPLMFindAircraftMenu();
@@ -127,9 +133,9 @@ void misc_ref() {
 
 void misc_stop() {
 	// Unregister commands
-	cmd_unbind("J3/Ground/ToggleCovers", cmd_handler, true, nullptr);
-	cmd_unbind("J3/Ground/ToggleClutter", cmd_handler, true, nullptr);
-	cmd_unbind("J3/Ground/ToggleGun", cmd_handler, true, nullptr);
-	cmd_unbind("J3/Ground/ToggleWheelPants", cmd_handler, true, nullptr);
-	cmd_unbind("J3/WaterRudder/Toggle", cmd_handler, true, nullptr);
+	cmd_unbind("J3/Ground/ToggleCovers", cmd_handler, 1, NULL);
+	cmd_unbind("J3/Ground/ToggleClutter", cmd_handler, 1, NULL);
+	cmd_unbind("J3/Ground/ToggleGun", cmd_handler, 1, NULL);
+	cmd_unbind("J3/Ground/ToggleWheelPants", cmd_handler, 1, NULL);
+	cmd_unbind("J3/WaterRudder/Toggle", cmd_handler, 1, NULL);
 }
