@@ -17,11 +17,11 @@
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
 #else
-	#include <string>
+#include <string>
 #endif
 
 #if LIN
-	#include <GL/gl.h>
+#include <GL/gl.h>
 #elif __MINGW32__
 	#include <GL/gl.h>
 #elif __GNUC__
@@ -37,16 +37,16 @@
 XPLMDataRef drefCom1Radio = XPLMFindDataRef("sim/cockpit2/radios/actuators/com1_frequency_hz_833");
 XPLMDataRef drefCom1Power = XPLMFindDataRef("sim/cockpit2/radios/actuators/com1_power");
 
-XPLMCommandRef radio1 = XPLMCreateCommand("J3/Radio/Num1", "Handheld Radio Press 1");
-XPLMCommandRef radio2 = XPLMCreateCommand("J3/Radio/Num2", "Handheld Radio Press 2");
-XPLMCommandRef radio3 = XPLMCreateCommand("J3/Radio/Num3", "Handheld Radio Press 3");
-XPLMCommandRef radio4 = XPLMCreateCommand("J3/Radio/Num4", "Handheld Radio Press 4");
-XPLMCommandRef radio5 = XPLMCreateCommand("J3/Radio/Num5", "Handheld Radio Press 5");
-XPLMCommandRef radio6 = XPLMCreateCommand("J3/Radio/Num6", "Handheld Radio Press 6");
-XPLMCommandRef radio7 = XPLMCreateCommand("J3/Radio/Num7", "Handheld Radio Press 7");
-XPLMCommandRef radio8 = XPLMCreateCommand("J3/Radio/Num8", "Handheld Radio Press 8");
-XPLMCommandRef radio9 = XPLMCreateCommand("J3/Radio/Num9", "Handheld Radio Press 9");
-XPLMCommandRef radio0 = XPLMCreateCommand("J3/Radio/Num0", "Handheld Radio Press 0");
+XPLMCommandRef radio1   = XPLMCreateCommand("J3/Radio/Num1", "Handheld Radio Press 1");
+XPLMCommandRef radio2   = XPLMCreateCommand("J3/Radio/Num2", "Handheld Radio Press 2");
+XPLMCommandRef radio3   = XPLMCreateCommand("J3/Radio/Num3", "Handheld Radio Press 3");
+XPLMCommandRef radio4   = XPLMCreateCommand("J3/Radio/Num4", "Handheld Radio Press 4");
+XPLMCommandRef radio5   = XPLMCreateCommand("J3/Radio/Num5", "Handheld Radio Press 5");
+XPLMCommandRef radio6   = XPLMCreateCommand("J3/Radio/Num6", "Handheld Radio Press 6");
+XPLMCommandRef radio7   = XPLMCreateCommand("J3/Radio/Num7", "Handheld Radio Press 7");
+XPLMCommandRef radio8   = XPLMCreateCommand("J3/Radio/Num8", "Handheld Radio Press 8");
+XPLMCommandRef radio9   = XPLMCreateCommand("J3/Radio/Num9", "Handheld Radio Press 9");
+XPLMCommandRef radio0   = XPLMCreateCommand("J3/Radio/Num0", "Handheld Radio Press 0");
 XPLMCommandRef radioCLR = XPLMCreateCommand("J3/Radio/CLR", "Handheld Radio Press CLR");
 XPLMCommandRef radiodot = XPLMCreateCommand("J3/Radio/dot", "Handheld Radio Press dot");
 
@@ -54,8 +54,7 @@ char freqBuffer[10];
 int pos = 0;
 int fontTextureID;
 
-int loadImage(const char* fileName)
-{
+int loadImage(const char *fileName) {
 	int imgWidth, imgHeight, nComps;
 
 	uint8_t *data = stbi_load(fileName, &imgWidth, &imgHeight, &nComps, sizeof(uint32_t));
@@ -79,17 +78,16 @@ int loadImage(const char* fileName)
 	return id;
 }
 
-char *absolutePath(char *relPath)
-{
+char *absolutePath(char *relPath) {
 	char rootPath[512];
 	char temp[256];
 	char *name_with_extension;
 	XPLMGetNthAircraftModel(0, temp, rootPath);
 
 	// Original snippet: https://github.com/SimSolutions1/SimSolutions-DA40/blob/13e8888bee09bc0f81355233415620ac21cce17a/plugins/DA40/src/simdraw.cpp#L163-L184
-	#if APL
+#if APL
         // On macOS, we have to do something really dumb to get a useable file path.
-        
+
         // We need to first find where the first slash is
         int slashPos;
 		for (int i = 0; i < strlen(rootPath); i++) {
@@ -107,21 +105,19 @@ char *absolutePath(char *relPath)
                 rootPath[i] = '/';
             }
         }
-    #endif 
+#endif
 
 
 	rootPath[strlen(rootPath) - strlen(temp)] = '\0';
-	name_with_extension = (char *)malloc(strlen(rootPath) + 1 + strlen(relPath));
+	name_with_extension                       = (char *)malloc(strlen(rootPath) + 1 + strlen(relPath));
 	strcpy(name_with_extension, rootPath);
 	strcat(name_with_extension, relPath);
 	return name_with_extension;
 }
 
-int radioAppend(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void *inRefcon)
-{
+int radioAppend(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void *inRefcon) {
 	int buttonvalue = '-';
-	if (inPhase == 2)
-	{
+	if (inPhase == 2) {
 		if (inCommand == radio1)
 			buttonvalue = 1;
 		else if (inCommand == radio2)
@@ -143,19 +139,16 @@ int radioAppend(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void *inRefc
 		else if (inCommand == radio0)
 			buttonvalue = 0;
 
-		if (buttonvalue != '-')
-		{
+		if (buttonvalue != '-') {
 			freqBuffer[pos] = buttonvalue + '0';
 			pos++;
 		}
-		else
-		{
+		else {
 			// If CLR is pressed
 			strcpy(freqBuffer, "-----");
 			pos = 0;
 		}
-		if (pos > 5)
-		{
+		if (pos > 5) {
 			pos = 0;
 			XPLMSetDatai(drefCom1Radio, atoi(freqBuffer));
 		}
@@ -163,27 +156,23 @@ int radioAppend(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void *inRefc
 	return 1;
 }
 
-int radioDraw(XPLMDrawingPhase inPhase, int inIsBefore, void *inRefcon)
-{
-
+int radioDraw(XPLMDrawingPhase inPhase, int inIsBefore, void *inRefcon) {
 	XPLMSetGraphicsState(0, 1, 0, 0, 1, 0, 0);
 	float col_white[] = {1.0, 1.0, 1.0};
-	int left = 0;
-	int right = 100;
-	int top = 100;
-	int bottom = 0;
+	int left          = 0;
+	int right         = 100;
+	int top           = 100;
+	int bottom        = 0;
 	XPLMBindTexture2d(fontTextureID, 0);
 
-	int x = 200;
-	int y = 1620;
-	int size = 264;
+	int x      = 200;
+	int y      = 1620;
+	int size   = 264;
 	int height = 128;
-	int width = 512;
-	for (size_t i = 0; i < strlen(freqBuffer); i++)
-	{
+	int width  = 512;
+	for (size_t i = 0; i < strlen(freqBuffer); i++) {
 		int number = freqBuffer[i] - '0';
-		if (number >= 0 && number <= 9)
-		{
+		if (number >= 0 && number <= 9) {
 			int trow = number / 5;
 			int tcol = number % 5;
 
@@ -241,8 +230,7 @@ int radioDraw(XPLMDrawingPhase inPhase, int inIsBefore, void *inRefcon)
 	return 1;
 }
 
-void radio_start()
-{
+void radio_start() {
 	XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
 	logMsg("Registering radio commands...");
 	XPLMRegisterCommandHandler(radio1, radioAppend, 1, nullptr);
@@ -262,10 +250,10 @@ void radio_start()
 
 	fontTextureID = loadImage(absolutePath("plugins/J3/radioscreen.png"));
 	XPLMSetDatai(drefCom1Power, 1);
-	
-	#if IBM
+
+#if IBM
 	itoa(XPLMGetDatai(drefCom1Radio), freqBuffer, 10);
-	#else
+#else
 	// This may be the dumbest thing I have ever written
 	freqBuffer[0] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[0];
 	freqBuffer[1] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[1];
@@ -277,11 +265,10 @@ void radio_start()
 	freqBuffer[7] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[7];
 	freqBuffer[8] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[8];
 	freqBuffer[9] = std::to_string(XPLMGetDatai(drefCom1Radio)).c_str()[9];
-	#endif
+#endif
 }
 
-void radio_stop()
-{
+void radio_stop() {
 	logMsg("Unregistering radio commands...");
 	XPLMUnregisterCommandHandler(radio1, radioAppend, 1, nullptr);
 	XPLMUnregisterCommandHandler(radio2, radioAppend, 1, nullptr);
