@@ -1,13 +1,23 @@
-# CMake stuff we don't want
-plugins/J3/CMakeFiles
-plugins/J3/cmake_install.cmake
-plugins/J3/CMakeCache.txt
-plugins/J3/Makefile
+# Aircraft Stuff
+*.acf~
+*_prefs.txt
 
-# X-Plane stuff we dont want
-J3.acf~
-J3_prefs.txt
-J3-Floats.acf~
-J3-Floats_prefs.txt
-J3-Tundra.acf~
-J3-Tundra_prefs.txt
+# Blender Stuff
+*.blend1
+
+# Plugin Compilation Stuff
+plugins/J3/.cache/*
+plugins/J3/.cmake/*
+plugins/J3/CMakeCache.txt
+plugins/J3/cmake_install.cmake
+plugins/J3/cmake-build-*
+plugins/J3/CMakeFiles
+plugins/J3/Makefile
+plugins/J3/compile_commands.json
+/plugins/J3/Testing/*
+*.cbp
+
+# IDE stuff
+.fleet
+.vscode
+.idea

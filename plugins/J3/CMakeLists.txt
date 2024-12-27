@@ -23,8 +23,8 @@ add_definitions(
 )
 
 include_directories(
-    "libs/XSDK/CHeaders/XPLM"
-    "libs/XSDK/CHeaders/Widgets"
+    "libs/XPSDK/CHeaders/XPLM"
+    "libs/XPSDK/CHeaders/Widgets"
     "libs/libacfutils/include"
     "libs/stb"
 )
@@ -32,15 +32,15 @@ include_directories(
 if (CMAKE_SYSTEM_NAME MATCHES "Windows")
     set_target_properties(SimSolutionsJ3 PROPERTIES OUTPUT_NAME "win")
     include_directories("libs/libacfutils/win64/include")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -Wl,--version-script=exports.txt")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc")
     add_definitions(
         -DIBM
         -DGLEW_STATIC
         -D_USE_MATH_DEFINES
     )
     target_link_libraries(SimSolutionsJ3
-        "${CMAKE_CURRENT_SOURCE_DIR}/libs/XSDK/Libraries/Win/XPLM_64.lib"
-        "${CMAKE_CURRENT_SOURCE_DIR}/libs/XSDK/Libraries/Win/XPWidgets_64.lib"
+        "${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Win/XPLM_64.lib"
+        "${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Win/XPWidgets_64.lib"
         "${CMAKE_CURRENT_SOURCE_DIR}/libs/libacfutils/win64/lib/libacfutils32.a"
         opengl32
         imagehlp
@@ -57,8 +57,8 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
         "${CMAKE_CURRENT_SOURCE_DIR}/libs/libacfutils/mac64/lib/libfreetype.a"
         "${CMAKE_CURRENT_SOURCE_DIR}/libs/libacfutils/mac64/lib/libcairo.a"
         "${CMAKE_CURRENT_SOURCE_DIR}/libs/libacfutils/mac64/lib/libz.a"
-        "${CMAKE_CURRENT_SOURCE_DIR}/libs/XSDK/Libraries/Mac/XPLM.framework"
-        "${CMAKE_CURRENT_SOURCE_DIR}/libs/XSDK/Libraries/Mac/XPWidgets.framework"
+        "${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Mac/XPLM.framework"
+        "${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Mac/XPWidgets.framework"
         "-framework OpenGL"
         "-framework CoreFoundation"
         stdc++
@@ -66,7 +66,7 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
     set_target_properties(SimSolutionsJ3 PROPERTIES OUTPUT_NAME "lin")
     include_directories("libs/libacfutils/lin64/include")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--version-script=exports.txt")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     add_definitions(-DLIN)
     target_link_libraries(SimSolutionsJ3
         "${CMAKE_CURRENT_SOURCE_DIR}/libs/libacfutils/lin64/lib/libGLEWmx.a"

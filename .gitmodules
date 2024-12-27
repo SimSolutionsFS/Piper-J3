@@ -1,9 +1,9 @@
-[submodule "plugins/J3/libs/XSDK"]
-	path = plugins/J3/libs/XSDK
-	url = https://github.com/fpw/XSDK
 [submodule "plugins/J3/libs/stb"]
 	path = plugins/J3/libs/stb
 	url = https://github.com/nothings/stb
 [submodule "plugins/J3/libs/libacfutils"]
 	path = plugins/J3/libs/libacfutils
 	url = https://github.com/SimSolutions1/libacfutils
+[submodule "plugins/J3/libs/XPSDK"]
+	path = plugins/J3/libs/XPSDK
+	url = https://github.com/slimit75/XPSDK
