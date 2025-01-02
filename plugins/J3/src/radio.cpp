@@ -217,7 +217,7 @@ void radio_start() {
 
 	XPLMRegisterDrawCallback(radioDraw, xplm_Phase_Gauges, 1, nullptr);
 
-	fontTextureID = loadImage(absolutePath("plugins/J3/radioscreen.png"));
+	fontTextureID = loadImage(absolutePath("plugins/J3/resources/radioscreen.png"));
 
 	dr_find(&dr_com1_radio, "sim/cockpit2/radios/actuators/com1_frequency_hz_833");
 	dr_find(&dr_com1_power, "sim/cockpit2/radios/actuators/com1_power");

@@ -34,7 +34,7 @@ set_target_properties(SimSolutionsJ3 PROPERTIES SUFFIX ".xpl")
 include_directories(SimSolutionsJ3
 	"libs/XPSDK/CHeaders/XPLM"
 	"libs/XPSDK/CHeaders/Widgets"
-	"libs/libacfutils/include"
+	"libs/libacfutils-redist/include"
 	"libs/stb"
 )
 
@@ -47,7 +47,7 @@ else ()
 endif ()
 
 # Adapted from https://discord.com/channels/397379810067742721/529085059324444672/1029105813631029308
-set(LACF_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/libs/libacfutils/${ARCH}/lib")
+set(LACF_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/libs/libacfutils-redist/${ARCH}/lib")
 set(LACF_LIBS
 	"${LACF_ROOT}/libacfutils.a"
 	"${LACF_ROOT}/libiconv.a"
@@ -80,7 +80,7 @@ endif ()
 # OS-specific options
 if (WIN32)
 	set_target_properties(SimSolutionsJ3 PROPERTIES OUTPUT_NAME "win")
-	include_directories("libs/libacfutils/mingw64/include")
+	include_directories("libs/libacfutils-redist/mingw64/include")
 	add_definitions(
 		-DIBM
 		-DGLEW_STATIC
@@ -89,7 +89,7 @@ if (WIN32)
 	target_link_libraries(SimSolutionsJ3
 		"${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Win/XPLM_64.lib"
 		"${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Win/XPWidgets_64.lib"
-		"${CMAKE_CURRENT_SOURCE_DIR}/libs/libacfutils/win64/lib/libacfutils37.a"
+		"${CMAKE_CURRENT_SOURCE_DIR}/libs/libacfutils-redist/win64/lib/libacfutils37.a"
 		opengl32
 		imagehlp
 		Psapi
@@ -97,7 +97,7 @@ if (WIN32)
 	)
 elseif (APPLE)
 	set_target_properties(SimSolutionsJ3 PROPERTIES OUTPUT_NAME "mac")
-	include_directories("libs/libacfutils/mac64/include")
+	include_directories("libs/libacfutils-redist/mac64/include")
 	add_definitions(
 		-DAPL
 		-DGL_SILENCE_DEPRECATION
@@ -111,7 +111,7 @@ elseif (APPLE)
 	)
 else ()
 	set_target_properties(SimSolutionsJ3 PROPERTIES OUTPUT_NAME "lin")
-	include_directories("libs/libacfutils/lin64/include")
+	include_directories("libs/libacfutils-redist/lin64/include")
 	add_definitions(-DLIN)
 	target_link_libraries(SimSolutionsJ3
 		${LACF_LIBS}
