@@ -16,7 +16,6 @@
 */
 
 #include <string.h>
-#include <XPLMMenus.h>
 #include <XPLMProcessing.h>
 #include <acfutils/except.h>
 #include <acfutils/log.h>
@@ -50,7 +49,6 @@ PLUGIN_API int XPluginStart(char *plugin_name, char *plugin_signature, char *plu
 PLUGIN_API void XPluginStop(void) {
 	misc_stop();
 	radio_stop();
-
 	except_fini();
 }
 
