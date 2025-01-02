@@ -5,8 +5,8 @@ set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD 20)
 
 # CMake Settings
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -fPIC -static-libgcc -shared")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -fPIC -static-libgcc -shared")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -fPIC -shared")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -fPIC -shared")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
 set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0")
@@ -80,6 +80,8 @@ endif ()
 # OS-specific options
 if (WIN32)
 	set_target_properties(SimSolutionsJ3 PROPERTIES OUTPUT_NAME "win")
+	set(CMAKE_CXX_FLAGS "-O2 -fPIC -static-libgcc -static -shared")
+	set(CMAKE_C_FLAGS "-O2 -fPIC -static-libgcc -static -shared")
 	include_directories("libs/libacfutils-redist/mingw64/include")
 	add_definitions(
 		-DIBM
