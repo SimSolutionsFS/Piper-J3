@@ -242,7 +242,7 @@ void radio_start() {
 	dr_seti(&dr_com1_power, 1);
 
 #if IBM
-	itoa(XPLMGetDatai(drefCom1Radio), freqBuffer, 10);
+	itoa(XPLMGetDatai(dr_com1_radio), freqBuffer, 10);
 #else
 	for (int i = 0; i <= 9; i++) {
 		freqBuffer[i] = std::to_string(dr_geti(&dr_com1_radio)).c_str()[i];
