@@ -108,6 +108,7 @@ elseif (APPLE)
 		"${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Mac/XPLM.framework"
 		"${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Mac/XPWidgets.framework"
 		${LACF_LIBS}
+		"-framework OpenGL"
 		"-framework CoreFoundation"
 		stdc++
 	)
