@@ -6,6 +6,8 @@ on:
 
 jobs:
   Compile:
+    permissions:
+      contents: read
     strategy:
       matrix:
         os:
