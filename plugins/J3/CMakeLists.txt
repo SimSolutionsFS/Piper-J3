@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(SimSolutionsJ3 VERSION 1.0.2 DESCRIPTION "J3 for X-Plane 11")
+project(Piper-J3 VERSION 1.0.2 DESCRIPTION "J3 for X-Plane 11")
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD 20)
@@ -23,15 +23,15 @@ add_definitions(
 )
 
 # Files to compile
-add_executable(SimSolutionsJ3
+add_executable(Piper-J3
 	src/plugin.c
 	src/misc.c
 	src/radio.cpp
 )
-set_target_properties(SimSolutionsJ3 PROPERTIES SUFFIX ".xpl")
+set_target_properties(Piper-J3 PROPERTIES SUFFIX ".xpl")
 
 # Include dependencies
-include_directories(SimSolutionsJ3
+include_directories(Piper-J3
 	"libs/XPSDK/CHeaders/XPLM"
 	"libs/XPSDK/CHeaders/Widgets"
 	"libs/libacfutils-redist/include"
@@ -79,7 +79,7 @@ endif ()
 
 # OS-specific options
 if (WIN32)
-	set_target_properties(SimSolutionsJ3 PROPERTIES OUTPUT_NAME "win")
+	set_target_properties(Piper-J3 PROPERTIES OUTPUT_NAME "win")
 	set(CMAKE_CXX_FLAGS "-O2 -fPIC -static-libgcc -static -shared")
 	set(CMAKE_C_FLAGS "-O2 -fPIC -static-libgcc -static -shared")
 	include_directories("libs/libacfutils-redist/mingw64/include")
@@ -88,7 +88,7 @@ if (WIN32)
 		-DGLEW_STATIC
 		-D_USE_MATH_DEFINES
 	)
-	target_link_libraries(SimSolutionsJ3
+	target_link_libraries(Piper-J3
 		"${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Win/XPLM_64.lib"
 		"${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Win/XPWidgets_64.lib"
 		"${CMAKE_CURRENT_SOURCE_DIR}/libs/libacfutils-redist/win64/lib/libacfutils37.a"
@@ -98,13 +98,13 @@ if (WIN32)
 		stdc++
 	)
 elseif (APPLE)
-	set_target_properties(SimSolutionsJ3 PROPERTIES OUTPUT_NAME "mac")
+	set_target_properties(Piper-J3 PROPERTIES OUTPUT_NAME "mac")
 	include_directories("libs/libacfutils-redist/mac64/include")
 	add_definitions(
 		-DAPL
 		-DGL_SILENCE_DEPRECATION
 	)
-	target_link_libraries(SimSolutionsJ3
+	target_link_libraries(Piper-J3
 		"${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Mac/XPLM.framework"
 		"${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Mac/XPWidgets.framework"
 		${LACF_LIBS}
@@ -113,10 +113,10 @@ elseif (APPLE)
 		stdc++
 	)
 else ()
-	set_target_properties(SimSolutionsJ3 PROPERTIES OUTPUT_NAME "lin")
+	set_target_properties(Piper-J3 PROPERTIES OUTPUT_NAME "lin")
 	include_directories("libs/libacfutils-redist/lin64/include")
 	add_definitions(-DLIN)
-	target_link_libraries(SimSolutionsJ3
+	target_link_libraries(Piper-J3
 		${LACF_LIBS}
 		stdc++
 	)

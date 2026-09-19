@@ -1,6 +1,6 @@
 /*
  * misc.h - command & dataref registration, as well as some visual options
- * Copyright 2025 Brady Margeson & Ian Ward
+ * Copyright 2026 Brady Margeson & Ian Ward
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

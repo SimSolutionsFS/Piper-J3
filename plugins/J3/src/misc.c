@@ -1,6 +1,6 @@
 /*
  * misc.c - command & dataref registration, as well as some visual options
- * Copyright 2025 Brady Margeson & Ian Ward
+ * Copyright 2026 Brady Margeson & Ian Ward
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ int show_gun = 1;
 int show_wheel_pants;
 float water_rudder_pos = 0;
 int water_rudder_lower = 0;
-int on_floats          = 0;
+int on_floats = 0;
 int eng_running;
 int wow;
 
@@ -53,20 +53,22 @@ XPLMCommandRef cmd_water_rudder;
 
 // Handle toggle commands
 int cmd_handler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void *inRefcon) {
-	if (inCommand == cmd_toggle_covers) {
-		show_covers = !show_covers;
-	}
-	else if (inCommand == cmd_toggle_clutter) {
-		show_gnd_clutter = !show_gnd_clutter;
-	}
-	else if (inCommand == cmd_toggle_gun) {
-		show_gun = !show_gun;
-	}
-	else if (inCommand == cmd_toggle_wheel_pants) {
-		show_wheel_pants = !show_wheel_pants;
-	}
-	else if (inCommand == cmd_water_rudder) {
-		water_rudder_lower = !water_rudder_lower;
+	if (inPhase == xplm_CommandBegin) {
+		if (inCommand == cmd_toggle_covers) {
+			show_covers = !show_covers;
+		}
+		else if (inCommand == cmd_toggle_clutter) {
+			show_gnd_clutter = !show_gnd_clutter;
+		}
+		else if (inCommand == cmd_toggle_gun) {
+			show_gun = !show_gun;
+		}
+		else if (inCommand == cmd_toggle_wheel_pants) {
+			show_wheel_pants = !show_wheel_pants;
+		}
+		else if (inCommand == cmd_water_rudder) {
+			water_rudder_lower = !water_rudder_lower;
+		}
 	}
 
 	return 1;
@@ -85,11 +87,11 @@ void misc_start() {
 	dr_find(&dr_acf_desc, "sim/aircraft/view/acf_descrip");
 
 	// Create & register commands
-	cmd_toggle_covers      = XPLMCreateCommand("J3/Ground/ToggleCovers", "Toggle Covers");
-	cmd_toggle_clutter     = XPLMCreateCommand("J3/Ground/ToggleClutter", "Toggle Ground Clutter");
-	cmd_toggle_gun         = XPLMCreateCommand("J3/Ground/ToggleGun", "Toggle Gun");
+	cmd_toggle_covers = XPLMCreateCommand("J3/Ground/ToggleCovers", "Toggle Covers");
+	cmd_toggle_clutter = XPLMCreateCommand("J3/Ground/ToggleClutter", "Toggle Ground Clutter");
+	cmd_toggle_gun = XPLMCreateCommand("J3/Ground/ToggleGun", "Toggle Gun");
 	cmd_toggle_wheel_pants = XPLMCreateCommand("J3/Ground/ToggleWheelPants", "Toggle Wheel Pants");
-	cmd_water_rudder       = XPLMCreateCommand("J3/WaterRudder/Toggle", "Toggle the water rudder");
+	cmd_water_rudder = XPLMCreateCommand("J3/WaterRudder/Toggle", "Toggle the water rudder");
 	cmd_bind("J3/Ground/ToggleCovers", cmd_handler, 1, NULL);
 	cmd_bind("J3/Ground/ToggleClutter", cmd_handler, 1, NULL);
 	cmd_bind("J3/Ground/ToggleGun", cmd_handler, 1, NULL);
@@ -115,7 +117,7 @@ void misc_ref() {
 	dr_getvi(&dr_wow, &wow, (4 * on_floats), 1);
 	if ((eng_running == 1) && ((show_covers == 0) || (show_gnd_clutter == 0))) {
 		logMsg("Engine running with covers or clutter set, removing!");
-		show_covers      = 1;
+		show_covers = 1;
 		show_gnd_clutter = 1;
 	}
 	else if ((wow == 0) && (show_gnd_clutter == 0)) {
