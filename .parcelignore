@@ -1,0 +1,14 @@
+config.cfg
+cmake-build-*
+CMakeLists.txt
+*.acf~
+*_prefs.txt
+libs
+persistence.cfg
+*.odt
+*.blend
+src
+Testing
+skunkcrafts_updater*
+simcore
+OpenGPWS/airport.cache
