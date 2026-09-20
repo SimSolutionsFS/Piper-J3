@@ -23,7 +23,7 @@
 #include "misc.h"
 #include "radio.h"
 
-#define ACF_VERSION "v1.0.2"
+#define ACF_VERSION "v1.0.3"
 XPLMFlightLoopID acf_flt_loop;
 
 float flt_loop(float elapsedMe, float elapsedSim, int counter, void *refcon) {
