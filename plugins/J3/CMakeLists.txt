@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(Piper-J3 VERSION 1.0.2 DESCRIPTION "J3 for X-Plane 11")
+project(Piper-J3 VERSION 1.0.3)
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD 20)
@@ -10,7 +10,14 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -fPIC -shared")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
 set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/64")
+
+if (WIN32)
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/win_x64")
+elseif (APPLE)
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/mac_x64")
+else ()
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lin_x64")
+endif ()
 
 # Definitions for the X-Plane SDK
 add_definitions(
@@ -28,96 +35,43 @@ add_executable(Piper-J3
 	src/misc.c
 	src/radio.cpp
 )
+set_target_properties(Piper-J3 PROPERTIES OUTPUT_NAME "J3")
 set_target_properties(Piper-J3 PROPERTIES SUFFIX ".xpl")
 
 # Include dependencies
-include_directories(Piper-J3
-	"libs/XPSDK/CHeaders/XPLM"
-	"libs/XPSDK/CHeaders/Widgets"
-	"libs/libacfutils-redist/include"
-	"libs/stb"
-)
-
-if (WIN32)
-	set(ARCH "mingw64")
-elseif (APPLE)
-	set(ARCH "mac64")
-else ()
-	set(ARCH "lin64")
-endif ()
-
-# Adapted from https://discord.com/channels/397379810067742721/529085059324444672/1029105813631029308
-set(LACF_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/libs/libacfutils-redist/${ARCH}/lib")
-set(LACF_LIBS
-	"${LACF_ROOT}/libacfutils.a"
-	"${LACF_ROOT}/libiconv.a"
-	"${LACF_ROOT}/libcairo.a"
-	"${LACF_ROOT}/libpixman-1.a"
-	"${LACF_ROOT}/libfreetype.a"
-	"${LACF_ROOT}/libopusurl.a"
-	"${LACF_ROOT}/libopusfile.a"
-	"${LACF_ROOT}/libopus.a"
-	"${LACF_ROOT}/libogg.a"
-	"${LACF_ROOT}/libpcre2-8.a"
-	"${LACF_ROOT}/libproj.a"
-	"${LACF_ROOT}/libxml2.a"
-	"${LACF_ROOT}/libcurl.a"
-	"${LACF_ROOT}/libshp.a"
-	"${LACF_ROOT}/libcharset.a"
-	"${LACF_ROOT}/libpng16.a"
-	"${LACF_ROOT}/liblzma.a"
-	"${LACF_ROOT}/libz.a"
-	"${LACF_ROOT}/libssl.a"
-	"${LACF_ROOT}/libcrypto.a"
-)
-
-if (WIN32)
-	list(APPEND LACF_LIBS "${LACF_ROOT}/libglew32mx.a" crypt32 ws2_32 gdi32 dbghelp psapi winmm)
-else ()
-	list(APPEND LACF_LIBS "${LACF_ROOT}/libGLEWmx.a" pthread)
-endif ()
+add_subdirectory("simcore")
+add_dependencies(Piper-J3 simcore)
 
 # OS-specific options
 if (WIN32)
-	set_target_properties(Piper-J3 PROPERTIES OUTPUT_NAME "win")
 	set(CMAKE_CXX_FLAGS "-O2 -fPIC -static-libgcc -static -shared")
 	set(CMAKE_C_FLAGS "-O2 -fPIC -static-libgcc -static -shared")
-	include_directories("libs/libacfutils-redist/mingw64/include")
 	add_definitions(
 		-DIBM
 		-DGLEW_STATIC
 		-D_USE_MATH_DEFINES
 	)
 	target_link_libraries(Piper-J3
-		"${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Win/XPLM_64.lib"
-		"${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Win/XPWidgets_64.lib"
-		"${CMAKE_CURRENT_SOURCE_DIR}/libs/libacfutils-redist/win64/lib/libacfutils37.a"
+		simcore
 		opengl32
 		imagehlp
 		Psapi
 		stdc++
 	)
 elseif (APPLE)
-	set_target_properties(Piper-J3 PROPERTIES OUTPUT_NAME "mac")
-	include_directories("libs/libacfutils-redist/mac64/include")
 	add_definitions(
 		-DAPL
 		-DGL_SILENCE_DEPRECATION
 	)
 	target_link_libraries(Piper-J3
-		"${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Mac/XPLM.framework"
-		"${CMAKE_CURRENT_SOURCE_DIR}/libs/XPSDK/Libraries/Mac/XPWidgets.framework"
-		${LACF_LIBS}
-		"-framework OpenGL"
+		simcore
 		"-framework CoreFoundation"
 		stdc++
 	)
 else ()
-	set_target_properties(Piper-J3 PROPERTIES OUTPUT_NAME "lin")
-	include_directories("libs/libacfutils-redist/lin64/include")
 	add_definitions(-DLIN)
 	target_link_libraries(Piper-J3
-		${LACF_LIBS}
+		simcore
 		stdc++
 	)
 endif ()
