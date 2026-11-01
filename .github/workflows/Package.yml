@@ -87,6 +87,6 @@ jobs:
           mv tmp/mac_x64/* Piper-J3/plugins/J3/mac_x64
           rm -r tmp
 
-      - uses: slimit75/Parcel@18ee9035934d448173f67e21f349cacbe5185463
+      - uses: slimit75/Parcel@ae31f12561b0565a789c6092a22422c7e16f88a4
         with:
           acf-in-name: 'Piper-J3'
