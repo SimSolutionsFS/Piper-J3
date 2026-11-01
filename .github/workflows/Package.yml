@@ -88,18 +88,6 @@ jobs:
           mv tmp/mac_x64/* Piper-J3/plugins/J3/mac_x64
           rm -r tmp
 
-      - run: curl -O https://raw.githubusercontent.com/slimit75/Parcel/refs/heads/main/parcel.py
-
-      - run: python parcel.py Piper-J3
-
-      - uses: actions/upload-artifact@v7.0.1
+      - uses: slimit75/Parcel@967955b142aacbfb31e0ce7caa749eb7f20499d0
         with:
-          name: Aircraft.zip
-          path: Piper-J3.zip
-          if-no-files-found: error
-
-      - uses: actions/upload-artifact@v7.0.1
-        with:
-          name: SkunkCraft Updater server files
-          path: output/*
-          if-no-files-found: warn
+          acf-in-name: 'Piper-J3'
