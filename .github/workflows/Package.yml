@@ -76,8 +76,7 @@ jobs:
         with:
           path: tmp
 
-      - run: |
-          ls
+      - run: |  
           mv Piper-J3/.parcelignore .parcelignore
           rm -r Piper-J3/plugins/J3/*_x64
           mkdir Piper-J3/plugins/J3/lin_x64
@@ -88,6 +87,6 @@ jobs:
           mv tmp/mac_x64/* Piper-J3/plugins/J3/mac_x64
           rm -r tmp
 
-      - uses: slimit75/Parcel@967955b142aacbfb31e0ce7caa749eb7f20499d0
+      - uses: slimit75/Parcel@18ee9035934d448173f67e21f349cacbe5185463
         with:
           acf-in-name: 'Piper-J3'
